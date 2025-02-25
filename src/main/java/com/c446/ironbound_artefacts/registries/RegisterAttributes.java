@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.registries;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.entities.archmage.ArchmageEntity;
 import com.c446.ironbound_artefacts.entities.comet.AstralCometEntity;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
@@ -15,5 +16,6 @@ public class RegisterAttributes {
     @SubscribeEvent
     public static void registerAttbitutes(EntityAttributeCreationEvent event){
         event.put(IBEntitiesReg.SIMULACRUM.get(), SimulacrumEntity.createAttributes().build());
+        event.put(IBEntitiesReg.ARCHMAGE.get(), ArchmageEntity.createAttributes().build());
     }
 }

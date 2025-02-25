@@ -4,6 +4,7 @@ import com.min01.tickrateapi.util.TickrateUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -36,8 +37,16 @@ public class IronboundArtefact {
 
     public static final String MODID = "ironbounds_artefacts";
     public static final Logger LOGGER = LogManager.getLogger();
-
     public IronboundArtefact(IEventBus modEventBus, ModContainer modContainer) {
+        try {
+            //MythicRarityReflector.append();
+            LOGGER.debug("ADDED MYTHIC RARITY SUCCESSFULLY");
+        } catch (Exception e) {
+            LOGGER.error("ERROR ! COULD NOT ADD MYTHIC RARITY");
+            LOGGER.debug(e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         ModSetup.register(modEventBus);
 //        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
         modEventBus.addListener(this::setup);

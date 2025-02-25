@@ -103,46 +103,15 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
                 .add(k(WALL_OF_FIRE_SPELL.get().getSpellId()))
                 .add(k(WITHER_SKULL_SPELL.get().getSpellId()))
                 .add(k(SUMMON_POLAR_BEAR_SPELL.get().getSpellId()))
-                .add(k(SUMMON_VEX_SPELL.get().getSpellId()));
-
+                .add(k(SUMMON_VEX_SPELL.get().getSpellId()))
+                .add(k(ELDRITCH_BLAST_SPELL.get()))
+                .add(k(SONIC_BOOM_SPELL.get()))
+                .add(k(SCULK_TENTACLES_SPELL.get()));
 
         tag(Tags.SpellTags.SUPPORT_SPELL)
                 .add(k(HASTE_SPELL.get()))
                 .add(k(BLESSING_OF_LIFE_SPELL.get()))
-                .add(k(HEALING_CIRCLE_SPELL.get()));
-
-        tag(Tags.SpellTags.ARCHMAGE_COMMON)
-                .add(k(COUNTERSPELL_SPELL))
-                .add(k(ABYSSAL_SHROUD_SPELL))
-                .add(k(HEAL_SPELL))
-                .add(k(CHARGE_SPELL))
-                .add(k(HASTE_SPELL));
-
-        tag(Tags.SpellTags.ARCHMAGE_ALLOWED_SPELL)
-                // LIGHTNING
-                .add(k(LIGHTNING_BOLT_SPELL))
-                .add(k(LIGHTNING_LANCE_SPELL))
-                .add(k(CHAIN_LIGHTNING_SPELL))
-                .add(k(BALL_LIGHTNING_SPELL))
-                .add(k(THUNDERSTORM_SPELL))
-                // FIRE
-                .add(k(FIREBALL_SPELL))
-                .add(k(HEAT_SURGE_SPELL))
-                .add(k(BURNING_DASH_SPELL))
-                .add(k(FIRE_BREATH_SPELL))
-                .add(k(FLAMING_BARRAGE_SPELL))
-                // ICE
-                .add(k(CONE_OF_COLD_SPELL))
-                .add(k(ICE_SPIKES_SPELL))
-                .add(k(ICE_BLOCK_SPELL))
-                .add(k(SUMMON_POLAR_BEAR_SPELL));
-
-        // BARRAGE
-        tag(Tags.SpellTags.ARCHMAGE_BARRAGE_SPELL)
-                .add(k(RAY_OF_FROST_SPELL))
-                .add(k(MAGMA_BOMB_SPELL))
-                .add(k(FIREBOLT_SPELL))
-                .add(k(ICICLE_SPELL))
-                .add(k(BALL_LIGHTNING_SPELL));
+                .add(k(HEALING_CIRCLE_SPELL.get()))
+                .add(k(ABYSSAL_SHROUD_SPELL.get()));
     }
 }

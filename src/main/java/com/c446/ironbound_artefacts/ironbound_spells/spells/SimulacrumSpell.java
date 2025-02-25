@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.ironbound_spells.spells;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.EnumModifier;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
@@ -23,7 +24,7 @@ public class SimulacrumSpell extends AbstractSpell {
 
     private final ResourceLocation spellId = IronboundArtefact.prefix("simulacrum");
 
-    private final DefaultConfig defaultConfig = new DefaultConfig().setMinRarity(SpellRarity.LEGENDARY).setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE).setMaxLevel(3).setCooldownSeconds((double) 3600 /3).build();
+    private final DefaultConfig defaultConfig = new DefaultConfig().setMinRarity(SpellRarity.valueOf("MYTHIC")).setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE).setMaxLevel(3).setCooldownSeconds((double) 3600 /3).build();
 
     public SimulacrumSpell() {
         this.baseSpellPower = 1;
@@ -57,7 +58,7 @@ public class SimulacrumSpell extends AbstractSpell {
 
     @Override
     public float getSpellPower(int spellLevel, @Nullable Entity sourceEntity) {
-        return (float) Math.max(0.1, 1f - (float) Utils.softCapFormula(super.getSpellPower(spellLevel, sourceEntity)));
+        return (float) Math.max(0.1,(float) Utils.softCapFormula(super.getSpellPower(spellLevel, sourceEntity))-1);
     }
 
     public void doSpell(ServerLevel world, int spellLevel, Player player, CastSource castSource, MagicData playerMagicData) {
@@ -74,16 +75,6 @@ public class SimulacrumSpell extends AbstractSpell {
                 simulacrum.setItemSlot(EquipmentSlot.CHEST, player.getItemBySlot(EquipmentSlot.CHEST));
                 simulacrum.setItemSlot(EquipmentSlot.HEAD, player.getItemBySlot(EquipmentSlot.HEAD));
                 */
-
-            simulacrum.setItemSlot(EquipmentSlot.MAINHAND, player.getItemBySlot(EquipmentSlot.MAINHAND));
-            simulacrum.setItemSlot(EquipmentSlot.OFFHAND, player.getItemBySlot(EquipmentSlot.OFFHAND));
-
-            simulacrum.setDropChance(EquipmentSlot.FEET, 0);
-            simulacrum.setDropChance(EquipmentSlot.LEGS, 0);
-            simulacrum.setDropChance(EquipmentSlot.CHEST, 0);
-            simulacrum.setDropChance(EquipmentSlot.HEAD, 0);
-            simulacrum.setDropChance(EquipmentSlot.MAINHAND, 0);
-            simulacrum.setDropChance(EquipmentSlot.OFFHAND, 0);
 
             var yrot = 6.281f / spellLevel * i + player.getYRot() * Mth.DEG_TO_RAD;
             Vec3 spawn = Utils.moveToRelativeGroundLevel(world, player.getEyePosition().add(new Vec3(radius * Mth.cos(yrot), 0, radius * Mth.sin(yrot))), 10);

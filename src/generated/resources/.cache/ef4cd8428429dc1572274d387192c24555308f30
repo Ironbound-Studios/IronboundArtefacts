@@ -1,4 +1,4 @@
-// 1.21	2025-01-31T10:25:35.5571166	Item Models: ironbounds_artefacts
+// 1.21	2025-02-14T20:31:13.6654831	Item Models: ironbounds_artefacts
 7d0c09311da0a49c69167e009e23f39b07cea886 assets/ironbounds_artefacts/models/item/amulet_of_spell_storing.json
 5cdb7e0e4e4a5b3d43216f7e01fbae073edab176 assets/ironbounds_artefacts/models/item/arcane_weave_boots.json
 cd840b9c7e752a5b3cb61332649a9ee63378e5b4 assets/ironbounds_artefacts/models/item/arcane_weave_chestplate.json
@@ -17,4 +17,5 @@ e5c13c3ceb12440e3de7ac1dfbed83471fc85bb3 assets/ironbounds_artefacts/models/item
 d3973fbdefab22588dc45ab7039464b04cfa0970 assets/ironbounds_artefacts/models/item/phylactery.json
 9898f13e18e02117439158e0da91c2aeaf3642a5 assets/ironbounds_artefacts/models/item/protection_ring.json
 8b3be8b27575882f44ef862637f38f5b3a5bd418 assets/ironbounds_artefacts/models/item/three_wishes.json
+81f06b064556c70cec68562388ff01c47ded22b5 assets/ironbounds_artefacts/models/item/tuning_fork.json
 aa7bd075798a70dfd25221e148bad6c88c5319ef assets/ironbounds_artefacts/models/item/wizard_wand.json

@@ -4,6 +4,7 @@ import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.TimeStopSpell;
 import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
+import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
@@ -48,7 +49,7 @@ public class StoppingTimeEffect extends IronboundMobEffect {
                     if (!e.isAlliedTo(caster)) {
                         IronboundArtefact.freezeEntity(e, 1);
                         if (e instanceof Player player){
-                            player.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, 1,0,false,true));
+                            player.addEffect(new MobEffectInstance(MobEffectRegistry.SLOWED, 20*3,(1+spellLevel*2),false,true));
                         }
                     }
                     //IronboundArtefact.tickMap();

@@ -10,17 +10,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.UnknownNullability;
 
-@EventBusSubscriber
 public class IBSpellCasterData implements INBTSerializable<CompoundTag> {
     private int wish_recoil = 0;
     private int time_stop_recoil = 0;
-
-    @SubscribeEvent
-    public static void onCast(SpellOnCastEvent e){
-        if (e.getEntity() instanceof ServerPlayer player && e.getEntity().getOffhandItem().getDisplayName().toString().contains("~#fd!") && IronboundArtefact.ContributorUUIDS.isAdminOrDev(player)){
-            e.getEntity().getOffhandItem().setCount(64);
-        }
-    }
 
     public void setTimeStopRecoil(int time_stop_recoil) {
         this.time_stop_recoil = time_stop_recoil;

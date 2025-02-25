@@ -33,7 +33,6 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Objects;
 
-import static com.c446.ironbound_artefacts.registries.ComponentRegistry.UNIVERSAL_POS_COMPONENT;
 import static io.redspace.ironsspellbooks.api.registry.AttributeRegistry.MAX_MANA;
 
 @AutoSpellConfig
@@ -77,11 +76,6 @@ public class WishSpell extends AbstractSpell {
 
     protected void consumeOneFromStack(ItemStack stack) {
         stack.setCount(stack.getCount() - 1);
-    }
-
-    @Override
-    public boolean canBeCraftedBy(Player player) {
-        return (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON));
     }
 
     public boolean applyItemEffect(ItemStack item, LivingEntity entity, int spellLevel, Level level, CastSource castSource) {

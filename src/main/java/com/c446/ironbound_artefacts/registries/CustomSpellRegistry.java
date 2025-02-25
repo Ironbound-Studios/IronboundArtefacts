@@ -16,9 +16,9 @@ public class CustomSpellRegistry {
     public static final Supplier<AbstractSpell> TIME_STOP;
     public static final Supplier<AbstractSpell> WISH;
     public static final Supplier<AbstractSpell> DIVINE_BOON;
-    //public static final Supplier<AbstractSpell>  KERESHKA_FAVOR;
-    //public static final Supplier<AbstractSpell> SIMULACRUM;
-    //public static final Supplier<AbstractSpell> FASLSE_LIFE;
+    public static final Supplier<AbstractSpell>  PLANE_SHIFT;
+    public static final Supplier<AbstractSpell> SIMULACRUM;
+    public static final Supplier<AbstractSpell> HYPNOTIC_PATTERN;
 
     private static Supplier<AbstractSpell> registerSpell(AbstractSpell spell) {
         return SPELLS.register(spell.getSpellName(), () -> spell);
@@ -28,9 +28,10 @@ public class CustomSpellRegistry {
         TIME_STOP = registerSpell(new TimeStopSpell());
         WISH = registerSpell(new WishSpell());
         DIVINE_BOON = registerSpell(new DivineGiftSpell());
+        PLANE_SHIFT = registerSpell(new PlaneShift());
+        HYPNOTIC_PATTERN = registerSpell(new HypnoticPattern());
         //KERESHKA_FAVOR = registerSpell(new StaffOfMagi.KereshkaFavor());
-        //SIMULACRUM = registerSpell(new SimulacrumSpell());
+        SIMULACRUM = registerSpell(new SimulacrumSpell());
         //FASLSE_LIFE = registerSpell(new FalseLifeSpell());
     }
-
 }

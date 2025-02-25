@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.registries;
 
 import com.c446.ironbound_artefacts.items.armor.archmagi_weave.ArchmagiWeaveItem;
+import com.c446.ironbound_artefacts.items.impl.TuningFork;
 import com.c446.ironbound_artefacts.items.impl.regular.ForsakenDreams;
 import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveItem;
 import com.c446.ironbound_artefacts.items.impl.lore_items.*;
@@ -83,7 +84,7 @@ public class ItemRegistry {
     //public static final DeferredHolder<Item, DeathAmulet> DEATH_AMULET;
     //public static final DeferredHolder<Item, LoversStopwatch> STOPWATCH = ITEMS.register("stopwatch", () -> new LoversStopwatch(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)))
     public static final DeferredHolder<Item, ForsakenDreams> DREAMS = ITEMS.register("forsaken_dreams", () -> new ForsakenDreams(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
-
+    public static final DeferredHolder<Item, TuningFork> TUNING_FORK_DEFERRED_HOLDER = ITEMS.register("tuning_fork", ()-> new TuningFork(ItemPropertiesHelper.equipment(1)));
 
     public static final DeferredHolder<Item, CurioBaseItem> ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(15).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)));
     //public static final DeferredHolder<Item, AmuletOfMana> AMULET_OF_MANA;

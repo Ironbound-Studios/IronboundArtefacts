@@ -2,10 +2,12 @@ package com.c446.ironbound_artefacts.items.impl.lore_items;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
+import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.MinecraftInstanceHelper;
 import net.minecraft.ChatFormatting;
@@ -13,20 +15,43 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static net.minecraft.tags.EntityTypeTags.UNDEAD;
 
 public class LichCrown extends UserDependantCurios {
     public LichCrown(Properties p) {
         super(p);
+        NeoForge.EVENT_BUS.addListener(LichCrown::doLichCrownStuff);
+    }
+
+    public static void doLichCrownStuff(LivingChangeTargetEvent event){
+        AtomicBoolean isCrownPresent = new AtomicBoolean(false);
+
+        if (event.getNewAboutToBeSetTarget() instanceof Player player) {
+            CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
+                isCrownPresent.set(!inv.findCurios((new ItemStack(ItemRegistry.LICH_CROWN)).getItem()).isEmpty());
+
+            });
+            if (isCrownPresent.get() && event.getEntity() instanceof Mob) {
+                if (event.getEntity().getType().is(UNDEAD) && !(event.getEntity() instanceof IMagicSummon)) {
+                    event.setCanceled(true);
+                }
+            }
+        }
     }
 
     @Override

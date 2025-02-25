@@ -15,11 +15,13 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import static com.c446.ironbound_artefacts.IronboundArtefact.LOGGER;
 import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 import static io.redspace.ironsspellbooks.registries.ItemRegistry.*;
 
 public class ModSetup {
     public static void register(IEventBus eventBus) {
+
         ItemRegistry.ITEMS.register(eventBus);
         AttributeRegistry.ATTRIBUTES.register(eventBus);
         EffectsRegistry.EFFECTS.register(eventBus);
@@ -30,13 +32,11 @@ public class ModSetup {
         ComponentRegistry.register(eventBus);
         //ArmorMaterials.MATERIALS.register(eventBus);
         ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);
-
     }
 
     public ModSetup(IEventBus modEventBus, ModContainer modContainer) {
         ModSetup.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
         modEventBus.addListener(this::setup);
     }
 
@@ -45,9 +45,9 @@ public class ModSetup {
     }
 
     public void setup(final FMLCommonSetupEvent event) {
+
         // DO OTHER MODS CONFIG
     }
-
 
     protected static class ModCreativeTabReg {
         public static final DeferredRegister<CreativeModeTab> CREATIVE_MOD_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);

@@ -51,6 +51,7 @@ public class ModModelsProvider extends ItemModelProvider {
         basicItem(ItemRegistry.ARCHMAGE_HEAD.get());
         basicItem(ItemRegistry.ARCHMAGE_LEG.get());
         handHeld(ItemRegistry.WIZARDING_WAND.get());
+        handHeld(ItemRegistry.TUNING_FORK_DEFERRED_HOLDER.get());
 
     }
 }

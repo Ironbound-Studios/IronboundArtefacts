@@ -1,5 +1,6 @@
 package com.c446.ironbound_artefacts.registries;
 
+import com.c446.ironbound_artefacts.entities.archmage.ArchmageEntity;
 import com.c446.ironbound_artefacts.entities.comet.AstralCometEntity;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -21,9 +22,17 @@ public class IBEntitiesReg {
     public static final DeferredHolder<EntityType<?>, EntityType<SimulacrumEntity>> SIMULACRUM = registerEntity(
             "simulacrum",
             EntityType.Builder.<SimulacrumEntity>of(SimulacrumEntity::new, MobCategory.MISC)
-                    .sized(1.0f, 2.0f)
+                    .sized(0.6f, 1.8f)
                     .setTrackingRange(30)
                     .noSave().noSummon().eyeHeight(1.75F)
+                    .setShouldReceiveVelocityUpdates(true));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ArchmageEntity>> ARCHMAGE = registerEntity(
+            "archmage",
+            EntityType.Builder.of(ArchmageEntity::new, MobCategory.MONSTER)
+                    .sized(0.6f, 1.8f)
+                    .setTrackingRange(30)
+                    .eyeHeight(1.75F)
                     .setShouldReceiveVelocityUpdates(true));
 
     public static final DeferredHolder<EntityType<?>, EntityType<AstralCometEntity>> COMET = registerEntity(

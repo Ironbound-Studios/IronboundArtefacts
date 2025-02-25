@@ -22,8 +22,6 @@ public class EvasionCloak extends CurioBaseItem {
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
-        System.out.println(slotContext.entity().tickCount - slotContext.entity().getLastHurtMobTimestamp());
-
         if ((slotContext.entity().tickCount - slotContext.entity().getLastHurtMobTimestamp()>= 20*4) && cooldown < 0){
             slotContext.entity().addEffect(new MobEffectInstance(MobEffectRegistry.EVASION, 200, 0));
             cooldown = 20*6;

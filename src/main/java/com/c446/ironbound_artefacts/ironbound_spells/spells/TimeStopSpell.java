@@ -8,9 +8,13 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.registries.SoundRegistry;
+import io.redspace.ironsspellbooks.spells.lightning.LightningLanceSpell;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +24,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.c446.ironbound_artefacts.registries.AttributeRegistry.INSIGHT;
 import static io.redspace.ironsspellbooks.api.registry.AttributeRegistry.ELDRITCH_SPELL_POWER;
@@ -32,6 +37,12 @@ public class TimeStopSpell extends AbstractSpell {
             .setMaxLevel(5)
             .setCooldownSeconds(1200)
             .build();
+
+    @Override
+    public Optional<SoundEvent> getCastStartSound() {
+        return Optional.of(SoundEvents.ANVIL_BREAK);
+    }
+
     private final ResourceLocation spellId = IronboundArtefact.prefix("time_stop");
 
 
@@ -87,11 +98,6 @@ public class TimeStopSpell extends AbstractSpell {
     @Override
     public ResourceLocation getSpellResource() {
         return spellId;
-    }
-
-    @Override
-    public boolean canBeCraftedBy(Player player) {
-        return player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON) || player.getName().toString().equals("Dev");
     }
 
     @Override

@@ -30,6 +30,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.*;
@@ -53,9 +54,12 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.c446.ironbound_artefacts.IronboundArtefact.LOGGER;
 
 public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, SupportMob {
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SimulacrumEntity.class, EntityDataSerializers.OPTIONAL_UUID);
@@ -75,8 +79,14 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     public SimulacrumEntity(Level pLevel, @NotNull Player player, float quality) {
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
         setSummoner(player);
-        IronboundArtefact.LOGGER.debug("current quality : {}", quality);
+        LOGGER.debug("current quality : {}", quality);
         this.quality = quality;
+        this.setItemSlot(EquipmentSlot.HEAD, player.getItemBySlot(EquipmentSlot.HEAD));
+        this.setItemSlot(EquipmentSlot.CHEST, player.getItemBySlot(EquipmentSlot.CHEST));
+        this.setItemSlot(EquipmentSlot.LEGS, player.getItemBySlot(EquipmentSlot.LEGS));
+        this.setItemSlot(EquipmentSlot.FEET, player.getItemBySlot(EquipmentSlot.FEET));
+        this.setItemSlot(EquipmentSlot.MAINHAND, player.getItemBySlot(EquipmentSlot.MAINHAND));
+        this.setItemSlot(EquipmentSlot.OFFHAND, player.getItemBySlot(EquipmentSlot.OFFHAND));
         //this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(this.getSummoner().getUUID());
     }
 
@@ -151,21 +161,30 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     public Player getSummoner() {
         if (this.player == null) {
             if (level().getPlayerByUUID(this.getOwnerUUID().get()) == null) {
-                IronboundArtefact.LOGGER.debug("isClient : {}player UUID is absent from the player list.", this.level().isClientSide);
+                //LOGGER.debug("isClient : {}player UUID is absent from the player list.", this.level().isClientSide);
             } else {
                 this.setSummoner(level().getPlayerByUUID(this.getOwnerUUID().get()));
             }
         } else {
-            IronboundArtefact.LOGGER.debug("isClient : {}player is/was not null. The good ending :3c", this.level().isClientSide);
+            //LOGGER.debug("isClient : {}player is/was not null. The good ending :3c", this.level().isClientSide);
             return this.player;
         }
         return this.level().getPlayerByUUID(this.getOwnerUUID().get());
+    }
+
+    @Override
+    protected boolean shouldDropLoot() {
+        return false;
     }
 
     public void setSummoner(Player player) {
         if (player != null) {
             this.getEntityData().set(OWNER_UUID, Optional.of(player.getUUID()));
             this.player = player;
+            var inv = CuriosApi.getCuriosInventory(this);
+            if (inv.isPresent()){
+                LOGGER.debug("Curios inv is present.");
+            }
             if (player.level().isClientSide) {
                 this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getUUID());
             }
@@ -216,26 +235,6 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             discard();
             return false;
         }
-    }
-
-    @Override
-    public void equip(@NotNull EquipmentTable pEquipmentTable, @NotNull LootParams pParams) {
-        super.equip(pEquipmentTable, pParams);
-    }
-
-    @Override
-    public void equip(@NotNull ResourceKey<LootTable> pEquipmentLootTable, @NotNull LootParams pParams, Map<EquipmentSlot, Float> pSlotDropChances) {
-        super.equip(pEquipmentLootTable, pParams, pSlotDropChances);
-    }
-
-    @Override
-    public void equip(@NotNull ResourceKey<LootTable> pEquipmentLootTable, @NotNull LootParams pParams, long pSeed, Map<EquipmentSlot, Float> pSlotDropChances) {
-        super.equip(pEquipmentLootTable, pParams, pSeed, pSlotDropChances);
-    }
-
-    @Override
-    public @Nullable EquipmentSlot resolveSlot(@NotNull ItemStack pStack, @NotNull List<EquipmentSlot> pExcludedSlots) {
-        return super.resolveSlot(pStack, pExcludedSlots);
     }
 
     public List<SpellSelectionManager.SelectionOption> getspelllist(Player player) {
@@ -333,7 +332,8 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     protected void registerWizardGoals() {
         this.goalSelector.removeAllGoals(a -> a instanceof WizardAttackGoal || a instanceof WizardSupportGoal<?>);
         if (this.getSummoner() instanceof Player player) {
-            this.goalSelector.addGoal(2, new WizardAttackGoal(this, 1.25f, 25, 60).setSpells(getOffensiveSpellsFromList(simpleGetSpells(player), player), getDefensiveSpells(simpleGetSpells(player), player), getMovementSpells(simpleGetSpells(player), player), getUtilSpells(simpleGetSpells(player), player)).setSpellQuality(this.quality * 0.75f, this.quality));
+            this.goalSelector.addGoal(2, new WizardAttackGoal(this, 1.25f, 25, 60).setSpells(getOffensiveSpellsFromList(simpleGetSpells(player), player), getDefensiveSpells(simpleGetSpells(player), player), getMovementSpells(simpleGetSpells(player), player), getUtilSpells(simpleGetSpells(player), player)).setSpellQuality(this.quality * 0.75f
+                    , this.quality));
             //System.out.println("min quality : " + this.quality * 0.75 + "max quality : " + this.quality);
             this.goalSelector.addGoal(2, new WizardSupportGoal<>(this, 1.25f, 100, 180).setSpells(getDefensiveSpells(simpleGetSpells(player), player), (getUtilSpells(simpleGetSpells(player), player))).setSpellQuality(this.quality * 0.75f, this.quality));
         }

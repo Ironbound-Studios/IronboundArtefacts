@@ -17,6 +17,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.EffectCure;
 
 import java.util.Set;
@@ -41,11 +42,12 @@ public class TimeStopEffect extends IronboundMobEffect {
 
     @Override
     public boolean applyEffectTick(LivingEntity livingEntity, int amplifier) {
-        livingEntity.setDeltaMovement(0, 0, 0);
+        //livingEntity.setDeltaMovement(0, 0, 0);
         if (livingEntity.hasData(DataAttachmentRegistry.MAGIC_DATA) && livingEntity instanceof ServerPlayer serverPlayer) {
             Utils.serverSideCancelCast(serverPlayer, true);
             MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts().removeAll(RecastResult.COUNTERSPELL);
         }
+        livingEntity.setPos(new Vec3(livingEntity.xOld, livingEntity.yOld, livingEntity.zOld));
         return super.applyEffectTick(livingEntity, amplifier);
     }
 

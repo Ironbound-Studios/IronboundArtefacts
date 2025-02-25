@@ -62,9 +62,6 @@ public class Phylactery extends CurioBaseItem {
         if (!stack.has(ComponentRegistry.KILL_COUNT_COMPONENT)) {
             stack.set(ComponentRegistry.KILL_COUNT_COMPONENT, new KillCounterComponent(1));
         }
-        if (!stack.has(ComponentRegistry.UNIVERSAL_POS_COMPONENT)) {
-            stack.set(ComponentRegistry.UNIVERSAL_POS_COMPONENT, UniversalPositionComponent.create(slotContext.entity()));
-        }
         if (!stack.has(SPELL_CONTAINER)) {
             stack.set(SPELL_CONTAINER, new SpellContainer(1, false, false, false, new SpellSlot[]{SpellSlot.of(new SpellData(SpellRegistry.HEARTSTOP_SPELL.get(), 10), 0)}));
         }

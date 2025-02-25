@@ -1,6 +1,6 @@
 {
   "block.examplemod.example_block": "Example Block",
-  "effect.ironbounds_artefacts.frozen": "Time Frozen",
+  "effect.ironbounds_artefacts.time_frozen": "Frozen",
   "effect.ironbounds_artefacts.stopping_time": "Stopping Time",
   "effect.ironbounds_artefacts.void_poison": "Wish Recoil ",
   "ironbounds_artefacts.attribute.insight": "Insight",
