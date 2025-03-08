@@ -149,7 +149,7 @@ public class WishSpell extends AbstractSpell {
                 var num = 0;
                 var selectedSpell = spells.get(num);
                 if (selectedSpell != null && selectedSpell.getSpell() != null && !Objects.equals(selectedSpell.getSpell().getSpellId(), this.getSpellId())) {
-                    if (SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).isPresent() && SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).get().is(Tags.SpellTags.WISH_UNCASTABLE){
+                    if (SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).isPresent() && SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).get().is(Tags.SpellTags.WISH_UNCASTABLE)){
                         serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("spell.ironbounds_artefacts.wish.invalid_spell").withStyle(ChatFormatting.RED)));
                     }
 
