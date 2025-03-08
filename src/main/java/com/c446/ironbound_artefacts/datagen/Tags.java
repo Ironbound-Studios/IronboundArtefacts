@@ -18,6 +18,7 @@ public class Tags {
         public static TagKey<AbstractSpell> DEFENSIVE_SPELL = create(IronboundArtefact.prefix("defensive_spell"));
         public static TagKey<AbstractSpell> MOUVEMENT_SPELL = create(IronboundArtefact.prefix("mouvement_spell"));
         public static TagKey<AbstractSpell> SUPPORT_SPELL = create(IronboundArtefact.prefix("support_spell"));
+        public static TagKey<AbstractSpell> WISH_BANNED = create(IronboundArtefact.prefix("wish_blacklisted"));
 
         public static TagKey<AbstractSpell> ARCHMAGE_ALLOWED_SPELL = create(IronboundArtefact.prefix("archmage_spells"));
         public static TagKey<AbstractSpell> ARCHMAGE_SINGLE_SPELL = create(IronboundArtefact.prefix("archmage_single_spells"));

@@ -112,7 +112,8 @@ dependencies {
 
     // PLAYER ANIMATOR ********************************************************************************************
     implementation "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
-
+    //implementation "curse.maven:gtbcs-spelllib-1194714:6164512"
+//    implementation "curse.maven:alshanexs-familiars-1171602:6250900"
     compileOnly "mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}"

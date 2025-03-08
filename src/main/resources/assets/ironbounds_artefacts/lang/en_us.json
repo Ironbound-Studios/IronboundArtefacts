@@ -93,5 +93,9 @@
   "spell.ironbounds_artefacts.wish.invalid_spell" : "Wish cannot cast this spell !",
   "spell.ironbounds_artefacts.wish.invalid_item" : "This item isn't compatible with Wish !",
   "tab.ironbounds_artefacts.curios": "Ironbounds Artefacts  ",
-  "ui.irons_spellbooks.divine_gift.amount": "%d Potion Created"
+  "ui.irons_spellbooks.divine_gift.amount": "%d Potion Created",
+  "ui.irons_spellbooks.wish.fail.spell": "Wish cannot cast this spell!",
+  "ui.irons_spellbooks.wish.fail": "This item is not compatible with wish...",
+  "entity.ironbounds_artefacts.simulacrum": "Simulacrum",
+  "entity.ironbounds_artefacts.archmage": "Archmage"
 }

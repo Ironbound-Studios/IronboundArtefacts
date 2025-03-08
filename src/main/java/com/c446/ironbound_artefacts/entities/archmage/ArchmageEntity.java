@@ -47,6 +47,11 @@ public class ArchmageEntity extends AbstractSpellCastingMob implements Enemy {
         this.registerGoals();
     }
 
+    public ArchmageEntity(Level level){
+        this(IBEntitiesReg.ARCHMAGE.get(), level);
+    }
+
+
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pSpawnType, @Nullable SpawnGroupData pSpawnGroupData) {
         var stuff = super.finalizeSpawn(pLevel, pDifficulty, pSpawnType, pSpawnGroupData);

@@ -12,6 +12,7 @@ import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.render.SpellBookCurioRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -28,8 +29,8 @@ public class ClientEvents {
     public static void renderRegisters(EntityRenderersEvent.RegisterRenderers event){
         ItemRegistry.ITEMS.getEntries().stream().filter(item -> item.get() instanceof SpellBook).forEach((item) -> CuriosRendererRegistry.register(item.get(), SpellBookCurioRenderer::new));
         event.registerEntityRenderer(IBEntitiesReg.SIMULACRUM.get(), SimulacrumRenderer::new);
-        event.registerEntityRenderer(IBEntitiesReg.COMET.get(), AstralCometRenderer::new);
         event.registerEntityRenderer(IBEntitiesReg.ARCHMAGE.get(), (EntityRendererProvider.Context renderManager) -> new ArchmageRenderer(renderManager, new ArchmageModel()));
+        event.registerEntityRenderer(IBEntitiesReg.FORCE_WALL.get(), NoopRenderer::new);
     }
 
     @SubscribeEvent

@@ -25,6 +25,7 @@ import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -79,7 +80,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     public SimulacrumEntity(Level pLevel, @NotNull Player player, float quality) {
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
         setSummoner(player);
-        LOGGER.debug("current quality : {}", quality);
+        //LOGGER.debug("current quality : {}", quality);
         this.quality = quality;
         this.setItemSlot(EquipmentSlot.HEAD, player.getItemBySlot(EquipmentSlot.HEAD).copy());
         this.setItemSlot(EquipmentSlot.CHEST, player.getItemBySlot(EquipmentSlot.CHEST).copy());
@@ -90,6 +91,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         //this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(this.getSummoner().getUUID());
     }
 
+
     public SimulacrumEntity(Level pLevel) {
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
     }
@@ -98,7 +100,9 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
      * Used for registring.
      * Don't use otherwise...
      *
-     * @param pEntityType : the entity type.
+     * @param pEntityType :"F": {
+     *       "tag": "minecraft:flowers"
+     *     }, the entity type.
      * @param pLevel      : the level to spawn the entity in
      */
     public SimulacrumEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
@@ -254,14 +258,14 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }
 
     public List<AbstractSpell> getOffensiveSpellsFromList(List<AbstractSpell> spells, Player player) {
-        System.out.println("getting offensive spells");
+        //System.out.println("getting offensive spells");
         var list = new ArrayList<AbstractSpell>();
 
         for (var spell : spells) {
             SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
                 if (a.is(Tags.SpellTags.OFFENSIVE_SPELL)) {
                     list.add(spell);
-                    System.out.println(spell.getSpellName());
+                    //System.out.println(spell.getSpellName());
                 }
             });
         }
@@ -269,14 +273,14 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }
 
     public List<AbstractSpell> getSupportSpells(List<AbstractSpell> spells, Player player) {
-        System.out.println("getting support spells");
+        //System.out.println("getting support spells");
         var list = new ArrayList<AbstractSpell>();
 
         for (var spell : spells) {
             SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
                 if (a.is(Tags.SpellTags.DEFENSIVE_SPELL)) {
                     list.add(spell);
-                    System.out.println(spell.getSpellName());
+                    //System.out.println(spell.getSpellName());
                 }
             });
         }
@@ -284,14 +288,14 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }
 
     public List<AbstractSpell> getDefensiveSpells(List<AbstractSpell> spells, Player player) {
-        System.out.println("getting defensive spells");
+        //System.out.println("getting defensive spells");
         var list = new ArrayList<AbstractSpell>();
 
         for (var spell : spells) {
             SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
                 if (a.is(Tags.SpellTags.DEFENSIVE_SPELL)) {
                     list.add(spell);
-                    System.out.println(spell.getSpellName());
+                    //System.out.println(spell.getSpellName());
                 }
             });
         }
@@ -299,14 +303,14 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }
 
     public List<AbstractSpell> getMovementSpells(List<AbstractSpell> spells, Player player) {
-        System.out.println("getting movement spells");
+        //System.out.println("getting movement spells");
         var list = new ArrayList<AbstractSpell>();
 
         for (var spell : spells) {
             SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
                 if (a.is(Tags.SpellTags.MOUVEMENT_SPELL)) {
                     list.add(spell);
-                    System.out.println(spell.getSpellName());
+                    //System.out.println(spell.getSpellName());
                 }
             });
         }
@@ -314,14 +318,14 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }
 
     public List<AbstractSpell> getUtilSpells(List<AbstractSpell> spells, Player player) {
-        System.out.println("getting utility spells");
+        //System.out.println("getting utility spells");
         var list = new ArrayList<AbstractSpell>();
 
         for (var spell : spells) {
             SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
                 if (a.is(Tags.SpellTags.UTILITY_SPELL)) {
                     list.add(spell);
-                    System.out.println(spell.getSpellName());
+                    //System.out.println(spell.getSpellName());
                 }
             });
         }
@@ -331,7 +335,11 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     protected void registerWizardGoals() {
         this.goalSelector.removeAllGoals(a -> a instanceof WizardAttackGoal || a instanceof WizardSupportGoal<?>);
         if (this.getSummoner() instanceof Player player) {
-            this.goalSelector.addGoal(2, new WizardAttackGoal(this, 1.25f, 25, 60).setSpells(getOffensiveSpellsFromList(simpleGetSpells(player), player), getDefensiveSpells(simpleGetSpells(player), player), getMovementSpells(simpleGetSpells(player), player), getUtilSpells(simpleGetSpells(player), player)).setSpellQuality(this.quality * 0.75f
+            this.goalSelector.addGoal(2, new WizardAttackGoal(this, 1.25f, 25, 60).setSpells(
+                    getOffensiveSpellsFromList(simpleGetSpells(player), player),
+                    getDefensiveSpells(simpleGetSpells(player), player),
+                    getMovementSpells(simpleGetSpells(player), player),
+                    getUtilSpells(simpleGetSpells(player), player)).setSpellQuality(this.quality * 0.9f
                     , this.quality));
             //System.out.println("min quality : " + this.quality * 0.75 + "max quality : " + this.quality);
             this.goalSelector.addGoal(2, new WizardSupportGoal<>(this, 1.25f, 100, 180).setSpells(getDefensiveSpells(simpleGetSpells(player), player), (getUtilSpells(simpleGetSpells(player), player))).setSpellQuality(this.quality * 0.75f, this.quality));
@@ -352,11 +360,22 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }*/
 
     @Override
+    public @NotNull Component getDisplayName() {
+        return this.getSummoner().getDisplayName();
+    }
+
+    @Override
+    public boolean shouldShowName() {
+        return true;
+    }
+
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         //SummonedPolarBear
 
-        this.goalSelector.addGoal(1, new GenericFollowOwnerGoal(this, this::getSummoner, 0.9f, 15, 5, false, 25));
+        this.goalSelector.addGoal(1, new GenericFollowOwnerGoal(this, this::getSummoner, 0.9f, 8, 3, false, 25));
+        
         //this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 3.0, 4f * 1.2, this::isAlliedTo));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new GenericOwnerHurtByTargetGoal(this, this::getSummoner));

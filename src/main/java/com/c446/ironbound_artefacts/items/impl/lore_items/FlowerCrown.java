@@ -22,6 +22,10 @@ public class FlowerCrown extends UserDependantCurios {
     }
 
     int timeOnGrass=0;
+    static {
+     //   net.alshanex.alshanex_familiars.spells.ShadowSummonSpell
+    }
+
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         if (slotContext.entity() != null && slotContext.entity() instanceof Player player){

@@ -2,6 +2,10 @@
   "values": [
     "irons_spellbooks:abyssal_shroud",
     "irons_spellbooks:oakskin",
-    "irons_spellbooks:evasion"
+    "irons_spellbooks:evasion",
+    "irons_spellbooks:charge",
+    "irons_spellbooks:haste",
+    "irons_spellbooks:heal",
+    "irons_spellbooks:greater_heal"
   ]
 }

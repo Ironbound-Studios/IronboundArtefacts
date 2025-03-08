@@ -1,9 +1,8 @@
 package com.c446.ironbound_artefacts.ironbound_spells.spells;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.components.UniversalPositionComponent;
 import com.c446.ironbound_artefacts.datagen.Tags;
-import com.c446.ironbound_artefacts.items.impl.lore_items.Phylactery;
+import com.c446.ironbound_artefacts.entities.archmage.ArchmageEntity;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
@@ -12,11 +11,14 @@ import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
-import io.redspace.ironsspellbooks.network.SyncManaPacket;
 import io.redspace.ironsspellbooks.registries.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -26,18 +28,17 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import top.theillusivec4.curios.api.CuriosApi;
 
+import java.util.List;
 import java.util.Objects;
-
-import static io.redspace.ironsspellbooks.api.registry.AttributeRegistry.MAX_MANA;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @AutoSpellConfig
 public class WishSpell extends AbstractSpell {
@@ -95,16 +96,24 @@ public class WishSpell extends AbstractSpell {
         } else if (item.is(Items.GHAST_TEAR)) {
             return applyEffect(entity, MobEffects.REGENERATION, spellLevel, item);
         } else if (item.has(ComponentRegistry.SPELL_CONTAINER)) {
-            return handleSpellContainer(item, entity, serverPlayer, spellLevel, level, castSource);
+            var ret = !handleSpellContainer(item, entity, serverPlayer, spellLevel, level, castSource);
+            if (!ret && serverPlayer != null) {
+                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("ui.irons_spellbooks.wish.fail.spell")));
+            }
+            return ret;
         } else if (item.is(Items.ZOMBIE_HEAD) && item.getCount() > 3) {
             return applySummonEffects(level, entity, spellLevel);
         } else if (item.is(Items.WITHER_SKELETON_SKULL)) {
             return handleWitherSkull(level, entity);
         } else if (item.is(Tags.ItemTags.WISH_DUPLICABLE)) {
             return handleWishDuplicable(item);
+        } else if (item.is(Items.GLASS_BOTTLE) && item.has(DataComponents.POTION_CONTENTS)) {
+            return handleHeroFeast(item, level, spellLevel,entity);
+        } else {
+            if (serverPlayer != null)
+                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("ui.irons_spellbooks.wish.fail").withStyle(ChatFormatting.RED)));
+            return false;
         }
-        if (serverPlayer != null)serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("spell.ironbounds_artefacts.wish.invalid_spell")))
-        return false;
     }
 
     private boolean applyEffect(LivingEntity entity, Holder<MobEffect> effect, int spellLevel, ItemStack item) {
@@ -119,13 +128,25 @@ public class WishSpell extends AbstractSpell {
         return true;
     }
 
+    private boolean handleHeroFeast(ItemStack item, Level level, int spellLevel, LivingEntity entity) {
+        var wine = new ItemStack(Items.POTION, 8).set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.REGENERATION));
+        var items = List.of();
+        return false;
+    }
+
+    private boolean summonArchmage(ItemStack item, Level level, LivingEntity caster){
+        var pos = caster.getLookAngle().normalize().scale(3d).add(caster.getEyePosition());
+        level.addFreshEntity(new ArchmageEntity(level));
+        return true;
+    }
+
     private boolean handleSpellContainer(ItemStack item, LivingEntity entity, ServerPlayer serverPlayer, int spellLevel, Level level, CastSource castSource) {
         IronboundArtefact.LOGGER.debug("found spell container.");
         var spellContainer = item.get(ComponentRegistry.SPELL_CONTAINER);
         if (spellContainer != null && item.is(ItemRegistry.SCROLL.get())) {
             var spells = spellContainer.getActiveSpells();
             if (spells != null && !spells.isEmpty()) {
-                var num = level.random.nextIntBetweenInclusive(0, spells.size() - 1);
+                var num = 0;
                 var selectedSpell = spells.get(num);
                 if (selectedSpell != null && selectedSpell.getSpell() != null && !Objects.equals(selectedSpell.getSpell().getSpellId(), this.getSpellId())) {
                     if (SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).isPresent() && SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).get().is(Tags.SpellTags.WISH_UNCASTABLE){

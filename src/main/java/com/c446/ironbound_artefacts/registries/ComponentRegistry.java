@@ -32,6 +32,14 @@ public class ComponentRegistry {
             TuningForkAttachment::new
     );
 
+    private static final StreamCodec<ByteBuf, UniversalPositionComponent> BYTE_BUF_UNIVERSAL_POSITION_COMPONENT_STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.DOUBLE, UniversalPositionComponent::x,
+            ByteBufCodecs.DOUBLE, UniversalPositionComponent::y,
+            ByteBufCodecs.DOUBLE, UniversalPositionComponent::z,
+            ByteBufCodecs.STRING_UTF8, UniversalPositionComponent::dimension,
+            UniversalPositionComponent::new
+    );
+
 
     private static final StreamCodec<ByteBuf, KillCounterComponent> KILL_COUNT = StreamCodec.composite(
             ByteBufCodecs.INT, KillCounterComponent::killCount,
@@ -43,7 +51,16 @@ public class ComponentRegistry {
                     Codec.STRING.fieldOf("dimension").forGetter(TuningForkAttachment::dim)
             ).apply(builder, TuningForkAttachment::new));
 
-    public static final Codec<KillCounterComponent> KILLCOUNT_CODEC = RecordCodecBuilder.create(builder -> builder.group(
+    public static final Codec<UniversalPositionComponent> UNIVERSAL_POSITION_COMPONENT_CODEC = RecordCodecBuilder.create(b->
+        b.group(
+                Codec.DOUBLE.fieldOf("xPos").forGetter(UniversalPositionComponent::x),
+                Codec.DOUBLE.fieldOf("yPos").forGetter(UniversalPositionComponent::y),
+                Codec.DOUBLE.fieldOf("zPos").forGetter(UniversalPositionComponent::z),
+                Codec.STRING.fieldOf("xPos").forGetter(UniversalPositionComponent::dimension)
+        ).apply(b, UniversalPositionComponent::new)
+    );
+
+    private static final Codec<KillCounterComponent> KILLCOUNT_CODEC = RecordCodecBuilder.create(builder -> builder.group(
             Codec.INT.fieldOf("count").forGetter(KillCounterComponent::killCount)
     ).apply(builder, KillCounterComponent::new));
 
@@ -52,12 +69,13 @@ public class ComponentRegistry {
             GenericUUIDComponent::new
     );
 
-    public static final Codec<GenericUUIDComponent> UUID_CODEC = RecordCodecBuilder.create(builder -> builder.group(
+    private static final Codec<GenericUUIDComponent> UUID_CODEC = RecordCodecBuilder.create(builder -> builder.group(
             Codec.STRING.fieldOf("uuid").forGetter(GenericUUIDComponent::uuid)
     ).apply(builder, GenericUUIDComponent::new));
 
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<KillCounterComponent>> KILL_COUNT_COMPONENT = COMPONENTS.registerComponentType("kill_count", builder -> builder.networkSynchronized(KILL_COUNT).persistent(KILLCOUNT_CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<GenericUUIDComponent>> UUID_DATA_COMPONENT = COMPONENTS.registerComponentType("uuid_component", builder -> builder.networkSynchronized(UUID_COMPONENT_STREAM_CODEC).persistent(UUID_CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<UniversalPositionComponent>> UNIVERSAL_POS = COMPONENTS.registerComponentType("tuning_rod_attachment", builder -> builder.networkSynchronized(BYTE_BUF_UNIVERSAL_POSITION_COMPONENT_STREAM_CODEC).persistent(UNIVERSAL_POSITION_COMPONENT_CODEC));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<TuningForkAttachment>> TUNING_FORK_ATTACHMENT = COMPONENTS.registerComponentType("tuning_fork_attachment", builder -> builder.networkSynchronized(TUNING_FORK).persistent(TUNING_FORK_ATTACHMENT_CODEC));
 }
