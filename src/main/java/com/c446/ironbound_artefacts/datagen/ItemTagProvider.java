@@ -62,7 +62,7 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .add(ARCHMAGE_CHEST.get())
                 .add(WEAVE_CHEST_PLATE.get());
         tag(ItemTags.LEG_ARMOR_ENCHANTABLE)
-                .add(ARCHMAGE_HEAD.get()) // This might be a mistake; should it be ARCHMAGE_LEG?
+                .add(ARCHMAGE_LEG.get()) // This might be a mistake; should it be ARCHMAGE_LEG?
                 .add(WEAVE_LEGGINGS.get());
         tag(ItemTags.DURABILITY_ENCHANTABLE)
                 .add(ARCHMAGE_CHEST.get())
