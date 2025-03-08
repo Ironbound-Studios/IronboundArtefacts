@@ -1,12 +1,16 @@
 package com.c446.ironbound_artefacts.registries;
 
+import com.c446.ironbound_artefacts.entities.AbstractHomingEntity;
 import com.c446.ironbound_artefacts.entities.archmage.ArchmageEntity;
 import com.c446.ironbound_artefacts.entities.comet.AstralCometEntity;
+import com.c446.ironbound_artefacts.entities.force_cage.ForceWall;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -29,17 +33,26 @@ public class IBEntitiesReg {
 
     public static final DeferredHolder<EntityType<?>, EntityType<ArchmageEntity>> ARCHMAGE = registerEntity(
             "archmage",
-            EntityType.Builder.of(ArchmageEntity::new, MobCategory.MONSTER)
+            EntityType.Builder.<ArchmageEntity>of(ArchmageEntity::new, MobCategory.MISC)
                     .sized(0.6f, 1.8f)
                     .setTrackingRange(30)
-                    .eyeHeight(1.75F)
+                    .noSave().noSummon().eyeHeight(1.75F)
                     .setShouldReceiveVelocityUpdates(true));
 
-    public static final DeferredHolder<EntityType<?>, EntityType<AstralCometEntity>> COMET = registerEntity(
-            "comet",
-            EntityType.Builder.<AstralCometEntity>of(AstralCometEntity::new, MobCategory.MISC)
-                    .sized(1.0f, 2.0f)
+    public static final DeferredHolder<EntityType<?>, EntityType<ForceWall>> FORCE_WALL = registerEntity(
+            "force_wall",
+            EntityType.Builder.of(ForceWall::new, MobCategory.MISC)
+                    .sized(0.25f, 0.25f)
                     .noSave()
-                    .setTrackingRange(10)
+                    .eyeHeight(0.25f/2)
                     .setShouldReceiveVelocityUpdates(true));
+
+//    public static final DeferredHolder<EntityType<?>, EntityType<AbstractHomingEntity>> HOMING = registerEntity(
+//            "homing_missile",
+//            EntityType.Builder.<AstralCometEntity>of(AbstractHomingEntity::new, MobCategory.MISC)
+//                    .sized(1.0f, 2.0f)
+//                    .noSave()
+//                    .setTrackingRange(10)
+//                    .setShouldReceiveVelocityUpdates(true));
+
 }

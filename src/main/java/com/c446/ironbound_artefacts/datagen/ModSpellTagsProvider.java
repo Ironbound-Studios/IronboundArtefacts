@@ -16,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import static io.redspace.ironsspellbooks.api.registry.SpellRegistry.*;
+import static com.c446.ironbound_artefacts.registries.CustomSpellRegistry.*;
 
 public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
 
@@ -63,7 +64,13 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
         tag(Tags.SpellTags.DEFENSIVE_SPELL)
                 .add(k(ABYSSAL_SHROUD_SPELL.get()))
                 .add(k(OAKSKIN_SPELL.get()))
-                .add(k(EVASION_SPELL.get()));
+                .add(k(EVASION_SPELL.get()))
+                .add(k(CHARGE_SPELL))
+                .add(k(HASTE_SPELL))
+                .add(k(HEAL_SPELL))
+                .add(k(GREATER_HEAL_SPELL))
+                .addOptional(ResourceLocation.parse("discerning_the_eldritch:otherworldly_presence"))
+        ;
 
         tag(Tags.SpellTags.OFFENSIVE_SPELL)
 //                .add(getKey(SpellRegistry.ACID_ORB_SPELL.get()))
@@ -74,7 +81,9 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
                 .add(k(BLOOD_SLASH_SPELL.get().getSpellId()))
                 .add(k(BLOOD_NEEDLES_SPELL.get().getSpellId()))
                 .add(k(CHAIN_CREEPER_SPELL.get().getSpellId()))
-                .add(k(CONE_OF_COLD_SPELL.get().getSpellId())).add(k(FIREBALL_SPELL.get().getSpellId()))
+                .add(k(CONE_OF_COLD_SPELL.get().getSpellId()))
+                .add(k(FIREBALL_SPELL))
+                .add(k(FIREBALL_SPELL.get().getSpellId()))
                 .add(k(FIRE_BREATH_SPELL.get().getSpellId()))
                 .add(k(FIRECRACKER_SPELL.get().getSpellId()))
                 .add(k(FLAMING_BARRAGE_SPELL.get().getSpellId()))
@@ -106,12 +115,16 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
                 .add(k(SUMMON_VEX_SPELL.get().getSpellId()))
                 .add(k(ELDRITCH_BLAST_SPELL.get()))
                 .add(k(SONIC_BOOM_SPELL.get()))
-                .add(k(SCULK_TENTACLES_SPELL.get()));
+                .add(k(SCULK_TENTACLES_SPELL.get()))
+                .addOptional(ResourceLocation.parse("discerning_the_eldritch:esoteric_edge"))
+        ;
 
         tag(Tags.SpellTags.SUPPORT_SPELL)
                 .add(k(HASTE_SPELL.get()))
                 .add(k(BLESSING_OF_LIFE_SPELL.get()))
                 .add(k(HEALING_CIRCLE_SPELL.get()))
                 .add(k(ABYSSAL_SHROUD_SPELL.get()));
+        tag(Tags.SpellTags.WISH_BANNED)
+                .add(k(TIME_STOP));
     }
 }

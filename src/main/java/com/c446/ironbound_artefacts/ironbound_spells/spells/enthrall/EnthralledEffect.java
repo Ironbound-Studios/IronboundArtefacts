@@ -19,6 +19,8 @@ import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 
 import java.util.Set;
 
+import static com.c446.ironbound_artefacts.registries.EffectsRegistry.ENTHRALLED;
+
 public class EnthralledEffect extends MagicMobEffect {
     public EnthralledEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
@@ -36,7 +38,6 @@ public class EnthralledEffect extends MagicMobEffect {
             }
         }
     }
-
     public static void onTarget(LivingChangeTargetEvent event) {
         if (!(event.getNewAboutToBeSetTarget() instanceof Player player)) {
             return;
@@ -62,7 +63,7 @@ public class EnthralledEffect extends MagicMobEffect {
     }
 
     public static boolean isEnthralledBy(Mob thrall, Player player) {
-        if (thrall.getEffect(EffectsRegistry.ENTHRALLED) instanceof DominatedEffectInstance dominatedEffectInstance && dominatedEffectInstance.receiver instanceof Mob mob && dominatedEffectInstance.emitter instanceof Player emitter) {
+        if (thrall.getEffect(ENTHRALLED) instanceof DominatedEffectInstance dominatedEffectInstance && dominatedEffectInstance.receiver instanceof Mob mob && dominatedEffectInstance.emitter instanceof Player emitter) {
             return (emitter == player);
         }
         return false;

@@ -82,8 +82,16 @@
   "spell.ironbounds_artefacts.kereshka_favor.guide": "You gain the blessing of the God of Elementals. The blessing's element corresponds to the first School Focus that you have in your inventory. Having a focus in your offhand will always take priority.",
   "spell.ironbounds_artefacts.time_stop": "Time Stop",
   "spell.ironbounds_artefacts.time_stop.guide": "You continually freeze the creatures that surround you for the duration of the spell. Frozen creatures are unable to move and cast spells and attack.",
+  "spell.ironbounds_artefacts.simulacrum": "Simulacrum",
+  "spell.ironbounds_artefacts.simulacrum.guide": "Conjures illusory copies of yourself to fight by your side.",
+  "spell.ironbounds_artefacts.hypnotic_pattern": "Hypnotic Pattern",
+  "spell.ironbounds_artefacts.hypnotic_pattern.guide": "Hypnotize creatures and subdue them to your will.\nThey will fight for you, and follow you as a Summon would.",
   "spell.ironbounds_artefacts.wish": "Wish",
   "spell.ironbounds_artefacts.wish.guide": "You express a wish to an extra planar being.\nDifferent items will have different effects.\nWishing with a scroll will cause you to cast the spell inscribed on it with a level bonus equal to the level of wish.\nAdditional effects may be discovered.\nThe item in your main hand has got priority, and your offhand will only be used if your main hand is empty.",
   "tab.ironbounds_artefacts.curios": "Ironbounds Artefacts  ",
-  "ui.irons_spellbooks.divine_gift.amount": "%d Potion Created"
+  "ui.irons_spellbooks.divine_gift.amount": "%d Potion Created",
+  "ui.irons_spellbooks.wish.fail.spell": "Wish cannot cast this spell!",
+  "ui.irons_spellbooks.wish.fail": "This item is not compatible with wish...",
+  "entity.ironbounds_artefacts.simulacrum": "Simulacrum",
+  "entity.ironbounds_artefacts.archmage": "Archmage"
 }

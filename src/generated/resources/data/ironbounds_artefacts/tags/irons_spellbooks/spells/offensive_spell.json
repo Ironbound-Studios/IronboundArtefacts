@@ -37,6 +37,9 @@
     "irons_spellbooks:wall_of_fire",
     "irons_spellbooks:wither_skull",
     "irons_spellbooks:summon_polar_bear",
-    "irons_spellbooks:summon_vex"
+    "irons_spellbooks:summon_vex",
+    "irons_spellbooks:eldritch_blast",
+    "irons_spellbooks:sonic_boom",
+    "irons_spellbooks:sculk_tentacles"
   ]
 }

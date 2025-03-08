@@ -40,10 +40,6 @@ public class AstralCometEntity extends MagicFireball {
 //        this.getEntityData().set(this.SIZE_FACTOR, 1f);
     }
 
-    public AstralCometEntity(Level pLevel, LivingEntity pShooter) {
-        this(IBEntitiesReg.COMET.get(), pLevel);
-        this.setOwner(pShooter);
-    }
 /*
     public float getSIZE_FACTOR() {
         return this.getEntityData().get(SIZE_FACTOR);

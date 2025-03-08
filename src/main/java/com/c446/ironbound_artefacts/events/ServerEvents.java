@@ -6,6 +6,7 @@ import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.attachment.FirstLoginData;
 import com.c446.ironbound_artefacts.components.KillCounterComponent;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
+import com.c446.ironbound_artefacts.ironbound_spells.spells.enthrall.DominatedEffectInstance;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.enthrall.EnthralledEffect;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import com.c446.ironbound_artefacts.items.impl.lore_items.LichCrown;
@@ -13,11 +14,13 @@ import com.c446.ironbound_artefacts.items.impl.lore_items.Phylactery;
 import com.c446.ironbound_artefacts.registries.*;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.HashMultimap;
+import dev.shadowsoffire.apothic_attributes.impl.AttributeEvents;
 import io.redspace.ironsspellbooks.api.events.*;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.events.SpellSummonEvent;
 import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
+import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
@@ -25,6 +28,7 @@ import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
 import io.redspace.ironsspellbooks.effect.AngelWingsEffect;
+import io.redspace.ironsspellbooks.effect.ThunderstormEffect;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.SummonedSkeleton;
 import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
@@ -62,6 +66,8 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -73,6 +79,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
@@ -87,6 +94,7 @@ import java.util.function.Predicate;
 
 import static com.c446.ironbound_artefacts.IronboundArtefact.ContributorUUIDS.*;
 import static com.c446.ironbound_artefacts.registries.ComponentRegistry.KILL_COUNT_COMPONENT;
+import static com.c446.ironbound_artefacts.registries.EffectsRegistry.ENTHRALLED;
 import static com.c446.ironbound_artefacts.registries.ItemRegistry.*;
 import static net.minecraft.tags.EntityTypeTags.UNDEAD;
 
@@ -133,21 +141,42 @@ public class ServerEvents {
     }
 
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onKill(LivingDeathEvent event) {
-        if (event.getSource().getEntity() instanceof Player player) {
-            //System.out.println(player.getDisplayName() + "killed" + event.getEntity().getDisplayName());
-            CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
-                var slot = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
-                if (slot.isPresent()) {
-                    var ring = slot.get();
-                    if (ring.stack().has(KILL_COUNT_COMPONENT)) {
-                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(Objects.requireNonNull(ring.stack().get(KILL_COUNT_COMPONENT)).killCount() + 1));
-                    } else {
-                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(1));
-                    }
-                }
-            });
+//    @SubscribeEvent(priority = EventPriority.HIGHEST)
+//    public static void onKill(LivingDeathEvent event) {
+//        if (event.getSource().getEntity() instanceof Player player) {
+//            //System.out.println(player.getDisplayName() + "killed" + event.getEntity().getDisplayName());
+//            CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
+//                var slot = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
+//                if (slot.isPresent()) {
+//                    var ring = slot.get();
+//                    if (ring.stack().has(KILL_COUNT_COMPONENT)) {
+//                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(Objects.requireNonNull(ring.stack().get(KILL_COUNT_COMPONENT)).killCount() + 1));
+//                    } else {
+//                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(1));
+//                    }
+//                }
+//            });
+//        }
+//    }
+
+    @SubscribeEvent
+    public static void NBTSaveCopy(PlayerEvent.Clone event) {
+        var entity = event.getOriginal();
+        var newEntity = event.getEntity();
+        if (entity.hasData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS)) {
+            newEntity.setData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS, entity.getData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS));
+        }
+    }
+
+    @SubscribeEvent
+    public static void entityJoins(EntityJoinLevelEvent event) {
+        if (event.getEntity() instanceof LivingEntity living && living.hasEffect(ENTHRALLED)) {
+            if (living.getEffect(ENTHRALLED) instanceof DominatedEffectInstance dom && dom.emitter != null && dom.receiver != null) {
+                // do nothing
+            } else {
+                living.removeEffect(ENTHRALLED);
+            }
+
         }
     }
 
@@ -155,94 +184,90 @@ public class ServerEvents {
     public static void PhylacteryHandler(LivingDeathEvent event) {
         if (event.getEntity() instanceof Player player) {
             CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
-                //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Checking inventory for player {}", player.getName().getString());
                 var phylacteries = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
+                if (player instanceof ServerPlayer serverPlayer && phylacteries.isPresent() && phylacteries.get().stack().has(KILL_COUNT_COMPONENT)) {
+                    var killCount = Objects.requireNonNull(phylacteries.get().stack().get(KILL_COUNT_COMPONENT)).killCount();
+                    if (killCount >= 5) {
+                        var stack = phylacteries.get().stack();
+                        if (!player.getCooldowns().isOnCooldown(stack.getItem())) {
+                            stack.set(KILL_COUNT_COMPONENT, new KillCounterComponent(Math.max(0, killCount * 2 / 3 - 5)));
+                            if (Objects.requireNonNull(serverPlayer.getServer()).getLevel(serverPlayer.getRespawnDimension()) != null && serverPlayer.getRespawnPosition() != null) {
+                                var dim = serverPlayer.getServer().getLevel(serverPlayer.getRespawnDimension());
 
-                if (player instanceof ServerPlayer serverPlayer) {
-                    //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Entity is ServerPlayer");
-                    if (phylacteries.isPresent()) {
-                        //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Phylactery found in inventory");
-                        if (phylacteries.get().stack().has(KILL_COUNT_COMPONENT)) {
-                            var killCount = Objects.requireNonNull(phylacteries.get().stack().get(KILL_COUNT_COMPONENT)).killCount();
-                            //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Kill count component found with kill count {}", killCount);
-
-                            if (killCount >= 5) {
-                                //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Kill count is >= 5");
-                                var stack = phylacteries.get().stack();
-
-                                if (!player.getCooldowns().isOnCooldown(stack.getItem())) {
-                                    //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Phylactery is not on cooldown");
-                                    stack.set(KILL_COUNT_COMPONENT, new KillCounterComponent(Math.max(0, killCount * 2 / 3 - 5)));
-                                    //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Kill count component updated");
-
-                                    if (Objects.requireNonNull(serverPlayer.getServer()).getLevel(serverPlayer.getRespawnDimension()) != null && serverPlayer.getRespawnPosition() != null) {
-                                        //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Valid respawn dimension and position found");
-                                        var dim = serverPlayer.getServer().getLevel(serverPlayer.getRespawnDimension());
-
-                                        if (dim != null) {
-                                            //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Changing dimension and setting player health");
-                                            serverPlayer.changeDimension(new DimensionTransition(dim, new Vec3(serverPlayer.getRespawnPosition().getX(), serverPlayer.getRespawnPosition().getY(), serverPlayer.getRespawnPosition().getZ()), Vec3.ZERO, serverPlayer.getXRot(), serverPlayer.getYRot(), false, DimensionTransition.DO_NOTHING));
-                                            player.setHealth((float) (player.getMaxHealth() * 0.5));
-                                            event.setCanceled(true);
-                                        } else {
-                                            //IronboundArtefact.LOGGER.debug("PhylacteryHandler: Respawn dimension is null");
-                                        }
-                                    } else {
-                                        IronboundArtefact.LOGGER.debug("PhylacteryHandler: Invalid respawn dimension or position");
-                                    }
-                                } else {
-                                    IronboundArtefact.LOGGER.debug("PhylacteryHandler: Phylactery is on cooldown");
+                                if (dim != null) {
+                                    serverPlayer.changeDimension(new DimensionTransition(dim, new Vec3(serverPlayer.getRespawnPosition().getX(), serverPlayer.getRespawnPosition().getY(), serverPlayer.getRespawnPosition().getZ()), Vec3.ZERO, serverPlayer.getXRot(), serverPlayer.getYRot(), false, DimensionTransition.DO_NOTHING));
+                                    player.setHealth((float) (player.getMaxHealth() * 0.5));
+                                    event.setCanceled(true);
                                 }
-                            } else {
-                                IronboundArtefact.LOGGER.debug("PhylacteryHandler: Kill count is less than 5");
                             }
-                        } else {
-                            IronboundArtefact.LOGGER.debug("PhylacteryHandler: Kill count component not found");
                         }
-                    } else {
-                        IronboundArtefact.LOGGER.debug("PhylacteryHandler: No phylactery found in inventory");
                     }
-                } else {
-                    IronboundArtefact.LOGGER.debug("PhylacteryHandler: Entity is not ServerPlayer");
                 }
             });
-        } else {
-            IronboundArtefact.LOGGER.debug("PhylacteryHandler: Entity is not a player");
+        }
+    }
+
+    @SubscribeEvent
+    public static void onSummonDamage(LivingDamageEvent.Pre event) {
+        if (event.getEntity() instanceof IMagicSummon summon && summon.getSummoner() != null) {
+            event.setNewDamage(
+                    (float) (event.getOriginalDamage() * summon.getSummoner().getAttributeValue(AttributeRegistry.SUMMON_DAMAGE)
+                    )
+            );
+        }
+    }
+
+    @SubscribeEvent
+    public static void onSummonSpellDamage(SpellDamageEvent event) {
+        if (event.getEntity() instanceof IMagicSummon summon && summon.getSummoner() != null) {
+            event.setAmount(
+                    (float) (event.getAmount() * summon.getSummoner().getAttributeValue(AttributeRegistry.SUMMON_DAMAGE)
+                    )
+            );
         }
     }
 
 
-//    @SubscribeEvent(priority = EventPriority.HIGHEST)
-//    public static void grantItemsOnJoin(PlayerEvent.PlayerLoggedInEvent event) {
-//        var uuid = event.getEntity().getStringUUID();
-//        var entity = event.getEntity();
+//    @SubscribeEvent
+//    static public void tick(PlayerTickEvent.Pre e) {
+//        e.getEntity().getMainHandItem().getAttributeModifiers().forEach(EquipmentSlotGroup.MAINHAND, (a, b) -> {
+//            System.out.println(b.id() + " : " + b.amount() + e.getEntity().getMainHandItem().getItem());
+//        });
 //
-//        if (IronboundArtefact.ContributorUUIDS.CONTRIBUTOR_LIST.contains(entity.getStringUUID()) && !entity.getData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS).hasLoggedIn) {
-//            event.getEntity().setData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS, new FirstLoginData().set(true));
-//
-//            switch (uuid) {
-//                case AMON -> {
-//                    entity.getInventory().add(new ItemStack(STAFF_OF_POWER));
-//                    entity.getInventory().add(new ItemStack(ARCHMAGE_SPELLBOOK));
-//                    entity.getInventory().add(new ItemStack(LIGHTNING_GLOVES));
-//                }
-//                case NINJA_FOX -> entity.getInventory().add(new ItemStack(FC));
-//                //case ACE -> entity.getInventory().add(new ItemStack(DEVILS_FINGER));
-//                case AMADHE -> entity.getInventory().add(new ItemStack(WIZARDING_WAND));
-//                //case CATMOTH -> entity.getInventory().add(new ItemStack(JUDGEMENT_SCALE));
-//                case ENDER,TAR -> {
-//                    entity.getInventory().add(new ItemStack(LICH_CROWN));
-//                    entity.getInventory().add(new ItemStack(PHYLACTERY));
-//                }
-//                //case THEKILLAGER -> entity.getInventory().add(new ItemStack(DEATH_AMULET));
-////case STYLY -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));
-////                case TOMATO -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));
-//            }
-//            /*if (entity.getName().toString().equals("dev")) {
-//                entity.getInventory().add(new ItemStack(ARCHMAGE_SPELLBOOK));
-//            }*/
-//        }
+//        e.getEntity().getOffhandItem().getAttributeModifiers().forEach(EquipmentSlotGroup.MAINHAND, (a, b) -> {
+//            System.out.println(b.id() + " : " + b.amount() + e.getEntity().getOffhandItem().getItem());
+//        });
 //    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void grantItemsOnJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        var uuid = event.getEntity().getStringUUID();
+        var entity = event.getEntity();
+        
+        if (IronboundArtefact.ContributorUUIDS.CONTRIBUTOR_LIST.contains(entity.getStringUUID()) && !entity.getData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS).hasLoggedIn) {
+            event.getEntity().setData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS, new FirstLoginData().set(true));
+
+            switch (uuid) {
+                case AMON -> {
+                    entity.getInventory().add(new ItemStack(STAFF_OF_POWER));
+                    entity.getInventory().add(new ItemStack(ARCHMAGE_SPELLBOOK));
+                    entity.getInventory().add(new ItemStack(LIGHTNING_GLOVES));
+                }
+                case NINJA_FOX -> entity.getInventory().add(new ItemStack(FC));
+                //case ACE -> entity.getInventory().add(new ItemStack(DEVILS_FINGER));
+                case AMADHE -> entity.getInventory().add(new ItemStack(WIZARDING_WAND));
+                //case CATMOTH -> entity.getInventory().add(new ItemStack(JUDGEMENT_SCALE));
+                case ENDER, TAR -> {
+                    entity.getInventory().add(new ItemStack(LICH_CROWN));
+                    entity.getInventory().add(new ItemStack(PHYLACTERY));
+                }
+                //case THEKILLAGER -> entity.getInventory().add(new ItemStack(DEATH_AMULET));
+
+                /// /case STYLY -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));
+                /// /                case TOMATO -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));
+            }
+        }
+    }
 
     /*@SubscribeEvent
     public static void onEntityDamaged(LivingDamageEvent.Pre event) {
@@ -264,7 +289,6 @@ public class ServerEvents {
             //event.getEntity().invulnerableTime = Config.iframeCount;
         }
     }*/
-
     @SubscribeEvent
     public static void levelTick(ServerTickEvent.Pre event) {
         IronboundArtefact.tickMap();
@@ -332,8 +356,8 @@ public class ServerEvents {
 
                 // Create a Multimap for attribute modifiers
                 HashMultimap<Holder<Attribute>, AttributeModifier> summonAttributes = HashMultimap.create();
-                summonAttributes.put(Attributes.MAX_HEALTH, new AttributeModifier(IronboundArtefact.prefix("summon_health_boost"), 4 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player), AttributeModifier.Operation.ADD_VALUE));
-                summonAttributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("summon_damage"), 2 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player), AttributeModifier.Operation.ADD_VALUE));
+                summonAttributes.put(Attributes.MAX_HEALTH, new AttributeModifier(IronboundArtefact.prefix("summon_health_boost"), 30, AttributeModifier.Operation.ADD_VALUE));
+                summonAttributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("summon_damage"), 10, AttributeModifier.Operation.ADD_VALUE));
 
                 // Apply the attribute modifiers to the creature
                 creature.getAttributes().addTransientAttributeModifiers(summonAttributes);

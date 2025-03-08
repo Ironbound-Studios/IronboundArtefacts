@@ -7,7 +7,10 @@ import com.c446.ironbound_artefacts.effects.TimeStopEffect;
 import com.c446.ironbound_artefacts.effects.StoppingTimeEffect;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.enthrall.EnthralledEffect;
 import com.c446.ironbound_artefacts.items.impl.lore_items.StaffOfMagi;
+import com.mojang.datafixers.types.templates.Sum;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
+import io.redspace.ironsspellbooks.effect.MagicMobEffect;
+import io.redspace.ironsspellbooks.effect.SummonTimer;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
@@ -25,10 +28,11 @@ import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 public class EffectsRegistry {
 
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, MODID);
-    public static final DeferredHolder<MobEffect, EnthralledEffect> ENTHRALLED = EFFECTS.register("enthralled", ()-> new EnthralledEffect(MobEffectCategory.HARMFUL, rgbToInt(255,0,255)));
+    public static final DeferredHolder<MobEffect, EnthralledEffect> ENTHRALLED = EFFECTS.register("enthralled", () -> new EnthralledEffect(MobEffectCategory.HARMFUL, rgbToInt(255, 0, 255)));
     public static final DeferredHolder<MobEffect, IronboundMobEffect.VoidPoison> VOID_POISON = EFFECTS.register("void_poison", () -> new IronboundMobEffect.VoidPoison(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)));
     public static final DeferredHolder<MobEffect, MobEffect> MANA_REGEN = EFFECTS.register("mana_regen", () -> new IronboundMobEffect(MobEffectCategory.BENEFICIAL, rgbToInt(0, 0, 200)).addAttributeModifier(AttributeRegistry.MANA_REGEN, IronboundArtefact.prefix("mana_regen_effect"), 0.10, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
     public static final DeferredHolder<MobEffect, StoppingTimeEffect> TIME_STOP_CASTER = EFFECTS.register("stopping_time", () -> new StoppingTimeEffect(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)));
+    public static final DeferredHolder<MobEffect, SummonTimer> SIMULACRUM_SUMMON = EFFECTS.register("summoned_simulacrum", () -> new SummonTimer(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)));
     //public static final DeferredHolder<MobEffect, PlaneShiftEffect> PLANE_SHIFT = EFFECTS.register("plane_shifting",  () -> new PlaneShiftEffect(MobEffectCategory.NEUTRAL, rgbToInt(255,0,255)));
 
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(BuiltInRegistries.POTION, MODID);
@@ -39,6 +43,12 @@ public class EffectsRegistry {
 //            new MobEffectInstance(MobEffectRegistry.ANGEL_WINGS, 6000, 0))
             )
     );
+
+    public static final Holder<Potion> WINE = POTIONS.register("wine_potion", () -> new Potion(
+            new MobEffectInstance(MobEffects.CONFUSION, 20 * 120, 0),
+            new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20 * 120, 0),
+            new MobEffectInstance(MobEffects.HUNGER, 20 * 120, 0)
+    ));
 
     public static final Holder<Potion> DIVINE_GIFT = POTIONS.register("divine_favour_greater", () -> new Potion(
                     new MobEffectInstance(MobEffects.HUNGER, 1, 0)

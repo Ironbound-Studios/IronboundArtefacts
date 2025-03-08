@@ -1,28 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " # ",
-    "C P",
-    " W "
+    "FRF",
+    "A A",
+    "FRF"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:dandelion"
+    "F": {
+      "tag": "minecraft:flowers"
     },
-    "C": {
-      "item": "minecraft:cornflower"
+    "A": {
+      "item": "irons_spellbooks:arcane_essence"
     },
     "R": {
-      "item": "irons_spellbooks:nature_rune"
-    },
-    "P": {
-      "item": "minecraft:poppy"
-    },
-    "W": {
-      "item": "minecraft:wither_rose"
+      "item": "irons_spellbooks:nature_upgrade_orb"
     }
   },
   "result": {
-    "item": "ironbounds_artefacts:flower_crown"
+    "id": "ironbounds_artefacts:flower_crown"
   }
 }
