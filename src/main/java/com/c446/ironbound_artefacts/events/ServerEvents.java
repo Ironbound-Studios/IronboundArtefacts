@@ -141,23 +141,23 @@ public class ServerEvents {
     }
 
 
-//    @SubscribeEvent(priority = EventPriority.HIGHEST)
-//    public static void onKill(LivingDeathEvent event) {
-//        if (event.getSource().getEntity() instanceof Player player) {
-//            //System.out.println(player.getDisplayName() + "killed" + event.getEntity().getDisplayName());
-//            CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
-//                var slot = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
-//                if (slot.isPresent()) {
-//                    var ring = slot.get();
-//                    if (ring.stack().has(KILL_COUNT_COMPONENT)) {
-//                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(Objects.requireNonNull(ring.stack().get(KILL_COUNT_COMPONENT)).killCount() + 1));
-//                    } else {
-//                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(1));
-//                    }
-//                }
-//            });
-//        }
-//    }
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onKill(LivingDeathEvent event) {
+        if (event.getSource().getEntity() instanceof Player player) {
+            //System.out.println(player.getDisplayName() + "killed" + event.getEntity().getDisplayName());
+            CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
+                var slot = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
+                if (slot.isPresent()) {
+                    var ring = slot.get();
+                    if (ring.stack().has(KILL_COUNT_COMPONENT)) {
+                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(Objects.requireNonNull(ring.stack().get(KILL_COUNT_COMPONENT)).killCount() + 1));
+                    } else {
+                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(1));
+                    }
+                }
+            });
+        }
+    }
 
     @SubscribeEvent
     public static void NBTSaveCopy(PlayerEvent.Clone event) {
