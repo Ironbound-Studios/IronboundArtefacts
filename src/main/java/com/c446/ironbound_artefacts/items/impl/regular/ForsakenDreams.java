@@ -1,19 +1,14 @@
 package com.c446.ironbound_artefacts.items.impl.regular;
 
-import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import net.minecraft.core.Holder;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import top.theillusivec4.curios.api.SlotContext;
-
-import java.util.List;
 
 public class ForsakenDreams extends CurioBaseItem {
     public ForsakenDreams(Properties properties) {
@@ -90,7 +85,6 @@ public class ForsakenDreams extends CurioBaseItem {
 //        }
 //        super.curioTick(slotContext, stack);
 //    }
-
 
 
     @Override

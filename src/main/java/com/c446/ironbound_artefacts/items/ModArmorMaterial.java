@@ -9,7 +9,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.EnumMap;
@@ -51,8 +52,6 @@ public class ModArmorMaterial {
     );
 
 
-
-
 //    private static Holder<ArmorMaterial> register(String name, EnumMap<ArmorItem.Type, Integer> defense, int enchantability, float toughness, float kb_res, Supplier<Item> ingredient){
 //        ResourceLocation loc = IronboundArtefact.prefix(name);
 //        Holder<SoundEvent> sound = SoundEvents.ARMOR_EQUIP_NETHERITE;
@@ -78,7 +77,7 @@ public class ModArmorMaterial {
 
         for (int var11 = 0; var11 < var10; ++var11) {
             ArmorItem.Type armoritem$type = var9[var11];
-            enummap.put(armoritem$type, (Integer) defense.get(armoritem$type));
+            enummap.put(armoritem$type, defense.get(armoritem$type));
         }
 
         return Registry.registerForHolder(BuiltInRegistries.ARMOR_MATERIAL, ResourceLocation.withDefaultNamespace(name), new ArmorMaterial(enummap, enchantmentValue, equipSound, repairIngridient, layers, toughness, knockbackResistance));

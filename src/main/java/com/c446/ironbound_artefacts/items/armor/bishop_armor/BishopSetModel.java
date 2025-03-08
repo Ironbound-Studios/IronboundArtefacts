@@ -1,7 +1,6 @@
 package com.c446.ironbound_artefacts.items.armor.bishop_armor;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveItem;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
@@ -9,7 +8,7 @@ import software.bernie.geckolib.model.DefaultedItemGeoModel;
 public class BishopSetModel extends DefaultedItemGeoModel<BishopSetItem> {
 
     public BishopSetModel() {
-        super(IronboundArtefact.prefix( ""));
+        super(IronboundArtefact.prefix(""));
     }
 
     @Override

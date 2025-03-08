@@ -4,26 +4,17 @@ import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
-import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
-import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 
@@ -31,6 +22,14 @@ import java.util.List;
 
 @AutoSpellConfig
 public class DivineGiftSpell extends AbstractSpell {
+    private final DefaultConfig defaultConfig = new DefaultConfig()
+            .setMinRarity(SpellRarity.LEGENDARY)
+            .setSchoolResource(SchoolRegistry.HOLY_RESOURCE)
+            .setMaxLevel(5)
+            .setCooldownSeconds(60 * 20)
+            .build();
+    private final ResourceLocation spellId = IronboundArtefact.prefix("divine_boon");
+
     public DivineGiftSpell() {
         this.baseSpellPower = 1;
         this.spellPowerPerLevel = 1;
@@ -46,13 +45,6 @@ public class DivineGiftSpell extends AbstractSpell {
         );
     }
 
-    private final DefaultConfig defaultConfig = new DefaultConfig()
-            .setMinRarity(SpellRarity.LEGENDARY)
-            .setSchoolResource(SchoolRegistry.HOLY_RESOURCE)
-            .setMaxLevel(5)
-            .setCooldownSeconds(60 * 20)
-            .build();
-
     @Override
     public boolean canBeCraftedBy(Player player) {
         return true;
@@ -62,8 +54,6 @@ public class DivineGiftSpell extends AbstractSpell {
     public int getSpellCooldown() {
         return 60 * 20 * 20;
     }
-
-    private final ResourceLocation spellId = IronboundArtefact.prefix("divine_boon");
 
     @Override
     public ResourceLocation getSpellResource() {

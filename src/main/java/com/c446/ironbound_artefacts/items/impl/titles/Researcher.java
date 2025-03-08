@@ -11,14 +11,14 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
 public class Researcher extends GenericTitleItem {
+    public int mult;
+
     public Researcher(Properties properties, int mult) {
         super(properties);
         this.rsrLoc = "thaumaturge_slot";
         this.identifier = "charm";
         this.mult = mult;
     }
-
-    public int mult;
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {

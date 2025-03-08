@@ -9,8 +9,8 @@ import org.jetbrains.annotations.UnknownNullability;
 public class FirstLoginData implements INBTSerializable<CompoundTag> {
     public boolean hasLoggedIn;
 
-    public FirstLoginData set(boolean value){
-        this.hasLoggedIn=value;
+    public FirstLoginData set(boolean value) {
+        this.hasLoggedIn = value;
         return this;
     }
 
@@ -23,6 +23,6 @@ public class FirstLoginData implements INBTSerializable<CompoundTag> {
 
     @Override
     public void deserializeNBT(HolderLookup.@NotNull Provider provider, CompoundTag nbt) {
-        this.hasLoggedIn=nbt.getBoolean("is_true");
+        this.hasLoggedIn = nbt.getBoolean("is_true");
     }
 }

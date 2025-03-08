@@ -4,7 +4,6 @@ import com.min01.tickrateapi.util.TickrateUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -18,6 +17,14 @@ import java.util.HashMap;
 @Mod(IronboundArtefact.MODID)
 public class IronboundArtefact {
     public static final HashMap<Entity, Integer> STOPPED_ENTITIES = new HashMap<>();
+    public static final String MODID = "ironbounds_artefacts";
+    public static final Logger LOGGER = LogManager.getLogger();
+
+    public IronboundArtefact(IEventBus modEventBus, ModContainer modContainer) {
+        ModSetup.register(modEventBus);
+//        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        modEventBus.addListener(this::setup);
+    }
 
     public static void freezeEntity(Entity entity, int timeOut) {
         STOPPED_ENTITIES.put(entity, timeOut);
@@ -35,14 +42,6 @@ public class IronboundArtefact {
         }
     }
 
-    public static final String MODID = "ironbounds_artefacts";
-    public static final Logger LOGGER = LogManager.getLogger();
-    public IronboundArtefact(IEventBus modEventBus, ModContainer modContainer) {
-        ModSetup.register(modEventBus);
-//        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
-        modEventBus.addListener(this::setup);
-    }
-
     public static ResourceLocation prefix(String path) {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
@@ -51,9 +50,6 @@ public class IronboundArtefact {
     }
 
     public static final class ContributorUUIDS {
-        public static boolean isAdminOrDev(ServerPlayer player){
-            return player.hasPermissions(2) || player.getStringUUID().equals(AMON) || player.getStringUUID().equals(ACE);
-        }
         public static final String ACE = "34e0c700-66dd-4932-8e0b-0083076609d5";
         public static final String AMADHE = "387aa6d4-f388-400f-b9c5-1514f238ceae";
         public static final String AMON = "2980a99e-8582-4f63-9b82-f7117bc8be2c";
@@ -65,7 +61,6 @@ public class IronboundArtefact {
         public static final String NINJA_FOX = "834a2387-6dec-4d57-8bd3-72be2a54ed54";
         public static final String STYLY = "03d1d7ca-657f-45ad-a51b-1f5dc85b2f4c";
         public static final String TOMATO = "5ff3e718-e002-4c48-bdc2-c638477620e4";
-
         public static ArrayList<String> CONTRIBUTOR_LIST = new ArrayList<>();
 
         static {
@@ -80,6 +75,10 @@ public class IronboundArtefact {
             CONTRIBUTOR_LIST.add(TOMATO);
             CONTRIBUTOR_LIST.add(THEKILLAGER);
             CONTRIBUTOR_LIST.add(STYLY);
+        }
+
+        public static boolean isAdminOrDev(ServerPlayer player) {
+            return player.hasPermissions(2) || player.getStringUUID().equals(AMON) || player.getStringUUID().equals(ACE);
         }
     }
 }

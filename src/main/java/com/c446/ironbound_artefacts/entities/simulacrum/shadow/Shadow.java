@@ -1,9 +1,7 @@
 package com.c446.ironbound_artefacts.entities.simulacrum.shadow;
 
 import com.c446.ironbound_artefacts.datagen.Tags;
-import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
-import dev.shadowsoffire.apothic_attributes.api.ALObjects;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
@@ -45,7 +43,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -67,7 +64,7 @@ public class Shadow extends NeutralWizard implements IMagicSummon, SupportMob {
      * If you wish to add an entity to it, I recommend sending me a message on discord, with the code to make it happen...
      *
      * @param pLevel : the server level to add the simulacrum to.
-     * @param owner : the owner of the Summon.
+     * @param owner  : the owner of the Summon.
      * @param shadow : the creature whom the player clonned.
      */
     public Shadow(Level pLevel, @NotNull Player owner, Player shadow, float quality) {

@@ -1,9 +1,8 @@
 package com.c446.ironbound_artefacts.registries;
 
+import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveItem;
 import com.c446.ironbound_artefacts.items.armor.archmagi_weave.ArchmagiWeaveItem;
 import com.c446.ironbound_artefacts.items.impl.TuningFork;
-import com.c446.ironbound_artefacts.items.impl.regular.ForsakenDreams;
-import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveItem;
 import com.c446.ironbound_artefacts.items.impl.lore_items.*;
 import com.c446.ironbound_artefacts.items.impl.regular.*;
 import io.redspace.ironsspellbooks.api.item.weapons.ExtendedSwordItem;
@@ -31,9 +30,9 @@ import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 
 public class ItemRegistry {
     public static final StaffTier TIER_STAFF_OF_MAGI = new StaffTier(5, -2.4F, new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-    public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(7, -2.4F,new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),  new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-    public static final StaffTier TIER_STAFF_OF_ARCANE = new StaffTier(5,-2.4F, new AttributeContainer(AttributeRegistry.CAST_TIME_REDUCTION,0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION,0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-    public static  final StaffTier TIER_SUN_STAFF = new StaffTier(5, -2.4F, new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.FIRE_SPELL_POWER, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+    public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(7, -2.4F, new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+    public static final StaffTier TIER_STAFF_OF_ARCANE = new StaffTier(5, -2.4F, new AttributeContainer(AttributeRegistry.CAST_TIME_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+    public static final StaffTier TIER_SUN_STAFF = new StaffTier(5, -2.4F, new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.FIRE_SPELL_POWER, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, MODID);
 
     // WANDS
@@ -42,9 +41,8 @@ public class ItemRegistry {
     //public static final DeferredHolder<Item, StaffOfMagi> STAFF_OF_MAGI = ITEMS.register("staff_of_magi", () -> new StaffOfMagi(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_MAGI))));
 
 
-
     // HEADWEARS
-    public static final DeferredHolder<Item, FlowerCrown> FC= ITEMS.register("flower_crown", ()->new FlowerCrown(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, FlowerCrown> FC = ITEMS.register("flower_crown", () -> new FlowerCrown(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));
     public static final DeferredHolder<Item, LichCrown> LICH_CROWN = ITEMS.register("emperor_crown", () -> new LichCrown(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
 
     // NECKLACES
@@ -62,7 +60,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, ElvenChains> ELVEN_CHAINS = ITEMS.register("elven_chains", () -> new ElvenChains(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));
 
     // GLOVES
-    public static final DeferredHolder<Item, BelligerentSkies> LIGHTNING_GLOVES = ITEMS.register("lightning_glove", ()-> new BelligerentSkies(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, BelligerentSkies> LIGHTNING_GLOVES = ITEMS.register("lightning_glove", () -> new BelligerentSkies(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));
     // BOOTS
 
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_HELMET = ITEMS.register("arcane_weave_helmet", () -> new ArcaneWeaveItem(Type.HELMET, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(55))));
@@ -72,7 +70,7 @@ public class ItemRegistry {
 
     public static final DeferredHolder<Item, ArchmagiWeaveItem> ARCHMAGE_HEAD = ITEMS.register("archmage_weave_helmet", () -> new ArchmagiWeaveItem(Type.HELMET, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(200))));
     public static final DeferredHolder<Item, ArchmagiWeaveItem> ARCHMAGE_CHEST = ITEMS.register("archmage_weave_chestplate", () -> new ArchmagiWeaveItem(Type.CHESTPLATE, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).durability(Type.CHESTPLATE.getDurability(200))));
-    public static final DeferredHolder<Item, ArchmagiWeaveItem> ARCHMAGE_LEG= ITEMS.register("archmage_weave_leggings", () -> new ArchmagiWeaveItem(Type.LEGGINGS, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).durability(Type.LEGGINGS.getDurability(200))));
+    public static final DeferredHolder<Item, ArchmagiWeaveItem> ARCHMAGE_LEG = ITEMS.register("archmage_weave_leggings", () -> new ArchmagiWeaveItem(Type.LEGGINGS, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).durability(Type.LEGGINGS.getDurability(200))));
     public static final DeferredHolder<Item, ArchmagiWeaveItem> ARCHMAGE_BOOTS = ITEMS.register("archmage_weave_boots", () -> new ArchmagiWeaveItem(Type.BOOTS, ItemPropertiesHelper.equipment().rarity(Rarity.EPIC).stacksTo(1).durability(Type.BOOTS.getDurability(200))));
     public static final DeferredHolder<Item, ArcaneWand> WIZARDING_WAND = ITEMS.register("wizard_wand", () -> new ArcaneWand(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_ARCANE))));
 
@@ -86,17 +84,15 @@ public class ItemRegistry {
     //public static final DeferredHolder<Item, DeathAmulet> DEATH_AMULET;
     //public static final DeferredHolder<Item, LoversStopwatch> STOPWATCH = ITEMS.register("stopwatch", () -> new LoversStopwatch(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)))
     public static final DeferredHolder<Item, ForsakenDreams> DREAMS = ITEMS.register("forsaken_dreams", () -> new ForsakenDreams(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
-    public static final DeferredHolder<Item, TuningFork> TUNING_FORK_DEFERRED_HOLDER = ITEMS.register("tuning_fork", ()-> new TuningFork(ItemPropertiesHelper.equipment(1)));
+    public static final DeferredHolder<Item, TuningFork> TUNING_FORK_DEFERRED_HOLDER = ITEMS.register("tuning_fork", () -> new TuningFork(ItemPropertiesHelper.equipment(1)));
 
     public static final DeferredHolder<Item, CurioBaseItem> ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(15).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)));
     //public static final DeferredHolder<Item, AmuletOfMana> AMULET_OF_MANA;
     //public static final DeferredHolder<Item, DeckOfAllThings> DECK_OF_ALL_THINGS;
 
 
-
-
     //public static final DeferredHolder<Item, HermitEye> HERMIT_EYE = ITEMS.register("hermit_eye", () -> new HermitEye(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
-   static {
+    static {
 
 
         //AMULET_OF_MANA = ITEMS.register("amulet_of_mana_storing", () -> new AmuletOfMana(new Item.Properties().durability(1500)));

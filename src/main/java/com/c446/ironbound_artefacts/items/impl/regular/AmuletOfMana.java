@@ -18,7 +18,7 @@ public class AmuletOfMana extends CurioBaseItem {
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         super.curioTick(slotContext, stack);
-        if (slotContext.entity().tickCount % 20 ==  0) {
+        if (slotContext.entity().tickCount % 20 == 0) {
             stack.setDamageValue((int) (stack.getDamageValue() + Math.log10((double) stack.getMaxDamage() / 2 - stack.getDamageValue())));
         }
     }

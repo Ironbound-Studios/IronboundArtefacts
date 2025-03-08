@@ -5,7 +5,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
-public class MarkoEffect extends IronboundMobEffect{
+public class MarkoEffect extends IronboundMobEffect {
 
     public MarkoEffect(MobEffectCategory category, int color) {
         super(category, color);

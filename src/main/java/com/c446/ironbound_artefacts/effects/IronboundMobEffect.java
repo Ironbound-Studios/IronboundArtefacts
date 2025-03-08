@@ -1,8 +1,5 @@
-
-
 package com.c446.ironbound_artefacts.effects;
 
-import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import com.c446.ironbound_artefacts.registries.IronboundDamageSources;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import net.minecraft.core.Holder;
@@ -13,8 +10,6 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-
-import java.util.Objects;
 
 public class IronboundMobEffect extends MobEffect {
 

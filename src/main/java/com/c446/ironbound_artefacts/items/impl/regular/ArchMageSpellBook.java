@@ -34,6 +34,13 @@ public class ArchMageSpellBook extends SpellBook {
         super(maxSpellSlots, pProperties);
     }
 
+    public static boolean canEntityUseItem(Entity entity) {
+        if (entity instanceof Player player) {
+            return (IronboundArtefact.ContributorUUIDS.CONTRIBUTOR_LIST.contains(player.getStringUUID()) || entity.getName().getString().equals("Dev"));
+        }
+        return false;
+    }
+
     public SpellBook withAttribute(Holder<Attribute> attribute, double value) {
         return (SpellBook) this.withAttributes(Curios.SPELLBOOK_SLOT, new AttributeContainer[]{new AttributeContainer(attribute, value, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)});
     }
@@ -42,13 +49,6 @@ public class ArchMageSpellBook extends SpellBook {
     public void appendHoverText(@NotNull ItemStack itemStack, TooltipContext context, @NotNull List<Component> lines, @NotNull TooltipFlag flag) {
 
         super.appendHoverText(itemStack, context, lines, flag);
-    }
-
-    public static boolean canEntityUseItem(Entity entity) {
-        if (entity instanceof Player player) {
-            return (IronboundArtefact.ContributorUUIDS.CONTRIBUTOR_LIST.contains(player.getStringUUID()) || entity.getName().getString().equals("Dev"));
-        }
-        return false;
     }
 
 //    @Override
@@ -70,8 +70,6 @@ public class ArchMageSpellBook extends SpellBook {
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
         return true;
     }
-
-
 
 
 }
