@@ -24,6 +24,9 @@ public class Tags {
         public static TagKey<AbstractSpell> ARCHMAGE_BARRAGE_SPELL = create(IronboundArtefact.prefix("archmage_barrage_spells"));
         public static TagKey<AbstractSpell> ARCHMAGE_COMMON = create(IronboundArtefact.prefix("archmage_common"));
 
+        public static TagKey<AbstractSpell> WISH_UNCASTABLE = create(IronboundArtefact.prefix("wish_banned"));
+
+
         public static TagKey<AbstractSpell> create(ResourceLocation name) {
             return new TagKey<AbstractSpell>(SpellRegistry.SPELL_REGISTRY_KEY, name);
         }

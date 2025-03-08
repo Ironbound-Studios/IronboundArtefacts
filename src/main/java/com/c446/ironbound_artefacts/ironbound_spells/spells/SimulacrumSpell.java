@@ -1,7 +1,6 @@
 package com.c446.ironbound_artefacts.ironbound_spells.spells;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.EnumModifier;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
@@ -24,7 +23,7 @@ public class SimulacrumSpell extends AbstractSpell {
 
     private final ResourceLocation spellId = IronboundArtefact.prefix("simulacrum");
 
-    private final DefaultConfig defaultConfig = new DefaultConfig().setMinRarity(SpellRarity.valueOf("MYTHIC")).setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE).setMaxLevel(3).setCooldownSeconds((double) 3600 /3).build();
+    private final DefaultConfig defaultConfig = new DefaultConfig().setMinRarity(SpellRarity.LEGENDARY).setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE).setMaxLevel(3).setCooldownSeconds((double) 3600 /3).build();
 
     public SimulacrumSpell() {
         this.baseSpellPower = 1;
