@@ -42,7 +42,7 @@ public class ComponentRegistry {
 
 
     private static final StreamCodec<ByteBuf, KillCounterComponent> KILL_COUNT = StreamCodec.composite(
-            ByteBufCodecs.INT, KillCounterComponent::killCount,
+            ByteBufCodecs.FLOAT, KillCounterComponent::killCount,
             KillCounterComponent::new
     );
 
@@ -61,7 +61,7 @@ public class ComponentRegistry {
     );
 
     private static final Codec<KillCounterComponent> KILLCOUNT_CODEC = RecordCodecBuilder.create(builder -> builder.group(
-            Codec.INT.fieldOf("count").forGetter(KillCounterComponent::killCount)
+            Codec.FLOAT.fieldOf("count").forGetter(KillCounterComponent::killCount)
     ).apply(builder, KillCounterComponent::new));
 
     private static final StreamCodec<ByteBuf, GenericUUIDComponent> UUID_COMPONENT_STREAM_CODEC = StreamCodec.composite(

@@ -5,6 +5,7 @@ import com.c446.ironbound_artefacts.Config;
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.attachment.FirstLoginData;
 import com.c446.ironbound_artefacts.components.KillCounterComponent;
+import com.c446.ironbound_artefacts.effects.IronboundMobEffect;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.enthrall.DominatedEffectInstance;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.enthrall.EnthralledEffect;
@@ -15,6 +16,7 @@ import com.c446.ironbound_artefacts.registries.*;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.HashMultimap;
 import dev.shadowsoffire.apothic_attributes.impl.AttributeEvents;
+import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.api.events.*;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.events.SpellSummonEvent;
@@ -48,6 +50,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -148,11 +151,20 @@ public class ServerEvents {
             CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
                 var slot = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
                 if (slot.isPresent()) {
+                    var c = Objects.requireNonNull(slot.get().stack().get(KILL_COUNT_COMPONENT)).killCount();
+                    final float MAX_SOULS = 0xffffffff;
+                    final float MIN_MULTIPLIER = 0.5f;
+                    final float MAX_MULTIPLIER = 2.0f;
+
+                    var scaledValue = MIN_MULTIPLIER + ((MAX_MULTIPLIER - MIN_MULTIPLIER) * (c /  MAX_SOULS));
+                    scaledValue = Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, scaledValue)); // Ensure scaledValue is within bounds
+
+                    var sp=(event.getEntity().getMaxHealth()*scaledValue);
                     var ring = slot.get();
                     if (ring.stack().has(KILL_COUNT_COMPONENT)) {
-                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(Objects.requireNonNull(ring.stack().get(KILL_COUNT_COMPONENT)).killCount() + 1));
+                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent((Objects.requireNonNull(ring.stack().get(KILL_COUNT_COMPONENT)).killCount() + sp)));
                     } else {
-                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(1));
+                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(sp));
                     }
                 }
             });
@@ -187,16 +199,18 @@ public class ServerEvents {
                 var phylacteries = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
                 if (player instanceof ServerPlayer serverPlayer && phylacteries.isPresent() && phylacteries.get().stack().has(KILL_COUNT_COMPONENT)) {
                     var killCount = Objects.requireNonNull(phylacteries.get().stack().get(KILL_COUNT_COMPONENT)).killCount();
-                    if (killCount >= 5) {
+                    if (killCount >= 20) {
                         var stack = phylacteries.get().stack();
                         if (!player.getCooldowns().isOnCooldown(stack.getItem())) {
-                            stack.set(KILL_COUNT_COMPONENT, new KillCounterComponent(Math.max(0, killCount * 2 / 3 - 5)));
+                            stack.set(KILL_COUNT_COMPONENT, new KillCounterComponent((int) Math.max(0, killCount*0.90f-20f))); // approaches 5% efficiency as we approach infinity
                             if (Objects.requireNonNull(serverPlayer.getServer()).getLevel(serverPlayer.getRespawnDimension()) != null && serverPlayer.getRespawnPosition() != null) {
                                 var dim = serverPlayer.getServer().getLevel(serverPlayer.getRespawnDimension());
 
                                 if (dim != null) {
                                     serverPlayer.changeDimension(new DimensionTransition(dim, new Vec3(serverPlayer.getRespawnPosition().getX(), serverPlayer.getRespawnPosition().getY(), serverPlayer.getRespawnPosition().getZ()), Vec3.ZERO, serverPlayer.getXRot(), serverPlayer.getYRot(), false, DimensionTransition.DO_NOTHING));
-                                    player.setHealth((float) (player.getMaxHealth() * 0.5));
+                                    player.setHealth((float) (player.getMaxHealth() * 0.7));
+                                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE,120)); // No insta killing after dying
+                                    player.addEffect(new MobEffectInstance(MobEffectRegistry.INSTANT_MANA,120));
                                     event.setCanceled(true);
                                 }
                             }
