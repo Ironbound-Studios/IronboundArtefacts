@@ -96,8 +96,7 @@ public class ItemRegistry {
 
 
     //public static final DeferredHolder<Item, HermitEye> HERMIT_EYE = ITEMS.register("hermit_eye", () -> new HermitEye(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
-
-    static {
+   static {
 
 
         //AMULET_OF_MANA = ITEMS.register("amulet_of_mana_storing", () -> new AmuletOfMana(new Item.Properties().durability(1500)));
