@@ -2,7 +2,6 @@ package com.c446.ironbound_artefacts.entities.electromancer;
 
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
-import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob;
 import io.redspace.ironsspellbooks.entity.mobs.goals.PatrolNearLocationGoal;
 import io.redspace.ironsspellbooks.entity.mobs.goals.WizardAttackGoal;
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -33,11 +31,7 @@ public class ElectromancerEntity extends AbstractSpellCastingMob {
         this.xpReward = 100;
     }
 
-    public boolean isHostileTowards(LivingEntity e) {
-        return this.isAlliedTo(e);
-    }
-
-    public static AttributeSupplier.Builder prepareAttribute(){
+    public static AttributeSupplier.Builder prepareAttribute() {
         return LivingEntity.createLivingAttributes()
                 .add(AttributeRegistry.LIGHTNING_SPELL_POWER, 2.5)
                 .add(Attributes.MAX_HEALTH, 120)
@@ -45,6 +39,10 @@ public class ElectromancerEntity extends AbstractSpellCastingMob {
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5)
                 .add(Attributes.MOVEMENT_SPEED, .25)
                 .add(Attributes.FOLLOW_RANGE, 32);
+    }
+
+    public boolean isHostileTowards(LivingEntity e) {
+        return this.isAlliedTo(e);
     }
 
     @Override
@@ -72,7 +70,7 @@ public class ElectromancerEntity extends AbstractSpellCastingMob {
         this.goalSelector.addGoal(3, new PatrolNearLocationGoal(this, 30.0F, 0.75F));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new WizardRecoverGoal(this));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, new Class[0]));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isHostileTowards));
     }
 }

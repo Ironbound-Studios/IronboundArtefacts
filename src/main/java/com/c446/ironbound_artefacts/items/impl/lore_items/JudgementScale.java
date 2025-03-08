@@ -82,7 +82,7 @@ public class JudgementScale extends UserDependantCurios {
             multiplier = 2;
         }
         var modifiers = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        modifiers.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("judgement_scale"), 0.125 * (multiplier+1), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        modifiers.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("judgement_scale"), 0.125 * (multiplier + 1), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         modifiers.put(Attributes.ARMOR, new AttributeModifier(IronboundArtefact.prefix("judgement_scale"), -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return modifiers;
     }

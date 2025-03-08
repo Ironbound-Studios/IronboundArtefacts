@@ -1,4 +1,3 @@
-
 package com.c446.ironbound_artefacts.items;
 
 import net.minecraft.network.chat.Component;

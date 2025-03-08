@@ -26,13 +26,10 @@ public class ForceCage extends AbstractSpell {
         return CastType.CONTINUOUS;
     }
 
-    
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
         Utils.raycastForEntity(level, entity, 20, true);
-
-
 
 
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);

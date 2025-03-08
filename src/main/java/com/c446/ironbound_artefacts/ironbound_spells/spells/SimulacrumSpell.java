@@ -13,7 +13,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -25,7 +24,7 @@ public class SimulacrumSpell extends AbstractSpell {
 
     private final ResourceLocation spellId = IronboundArtefact.prefix("simulacrum");
 
-    private final DefaultConfig defaultConfig = new DefaultConfig().setMinRarity(SpellRarity.LEGENDARY).setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE).setMaxLevel(3).setCooldownSeconds((double) 3600 /3).build();
+    private final DefaultConfig defaultConfig = new DefaultConfig().setMinRarity(SpellRarity.LEGENDARY).setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE).setMaxLevel(3).setCooldownSeconds((double) 3600 / 3).build();
 
     public SimulacrumSpell() {
         this.baseSpellPower = 1;
@@ -52,7 +51,7 @@ public class SimulacrumSpell extends AbstractSpell {
 
     @Override
     public float getSpellPower(int spellLevel, @Nullable Entity sourceEntity) {
-        return (float) Math.max(0.1,(float) Utils.softCapFormula(super.getSpellPower(spellLevel, sourceEntity))-1);
+        return (float) Math.max(0.1, (float) Utils.softCapFormula(super.getSpellPower(spellLevel, sourceEntity)) - 1);
     }
 
     public void doSpell(ServerLevel world, int spellLevel, Player player, CastSource castSource, MagicData playerMagicData) {
@@ -61,10 +60,10 @@ public class SimulacrumSpell extends AbstractSpell {
         }
 
         float radius = 1.5f + .185f * spellLevel;
-        player.addEffect(new MobEffectInstance(EffectsRegistry.SIMULACRUM_SUMMON, (int) (this.getSpellPower(spellLevel, player) * 60*20 * (spellPowerPerLevel* spellLevel + baseSpellPower)),0));
+        player.addEffect(new MobEffectInstance(EffectsRegistry.SIMULACRUM_SUMMON, (int) (this.getSpellPower(spellLevel, player) * 60 * 20 * (spellPowerPerLevel * spellLevel + baseSpellPower)), 0));
         for (int i = 0; i < spellLevel; i++) {
             var simulacrum = new SimulacrumEntity(world, player, this.getSpellPower(spellLevel, player));
-            simulacrum.addEffect(new MobEffectInstance(EffectsRegistry.SIMULACRUM_SUMMON, (int) (this.getSpellPower(spellLevel, player) * 60*20 * (spellPowerPerLevel* spellLevel + baseSpellPower)),0));
+            simulacrum.addEffect(new MobEffectInstance(EffectsRegistry.SIMULACRUM_SUMMON, (int) (this.getSpellPower(spellLevel, player) * 60 * 20 * (spellPowerPerLevel * spellLevel + baseSpellPower)), 0));
             System.out.println(player);
                 /*simulacrum.setItemSlot(EquipmentSlot.FEET, player.getItemBySlot(EquipmentSlot.FEET));
                 simulacrum.setItemSlot(EquipmentSlot.LEGS, player.getItemBySlot(EquipmentSlot.LEGS));

@@ -19,7 +19,7 @@ public class ElvenChains extends CurioBaseItem {
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         var attr = super.getAttributeModifiers(slotContext, id, stack);
-        if (slotContext.entity() != null){
+        if (slotContext.entity() != null) {
             if (slotContext.entity().getAttributeValue(Attributes.ARMOR) <= 15) {
                 attr.put(Attributes.ARMOR, new AttributeModifier(IronboundArtefact.prefix("elven_chains"), 15 - slotContext.entity().getAttributeValue(Attributes.ARMOR), AttributeModifier.Operation.ADD_VALUE));
             }

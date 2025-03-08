@@ -1,12 +1,7 @@
 package com.c446.ironbound_artefacts.attachment;
 
-import com.c446.ironbound_artefacts.IronboundArtefact;
-import io.redspace.ironsspellbooks.api.events.SpellOnCastEvent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -14,20 +9,20 @@ public class IBSpellCasterData implements INBTSerializable<CompoundTag> {
     private int wish_recoil = 0;
     private int time_stop_recoil = 0;
 
-    public void setTimeStopRecoil(int time_stop_recoil) {
-        this.time_stop_recoil = time_stop_recoil;
-    }
-
     public int getTimeStopRecoil() {
         return time_stop_recoil;
     }
 
-    public void setWishRecoil(int wish_recoil) {
-        this.wish_recoil = wish_recoil;
+    public void setTimeStopRecoil(int time_stop_recoil) {
+        this.time_stop_recoil = time_stop_recoil;
     }
 
     public int getWishRecoil() {
         return wish_recoil;
+    }
+
+    public void setWishRecoil(int wish_recoil) {
+        this.wish_recoil = wish_recoil;
     }
 
     @Override

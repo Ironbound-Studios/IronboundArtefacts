@@ -13,16 +13,15 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 public class GenericTitleItem extends CurioBaseItem {
+    public String rsrLoc = "";
+    public String identifier = "";
     public GenericTitleItem(Properties properties) {
         super(properties);
     }
 
-    public String rsrLoc = "";
-    public String identifier = "";
-
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
-        if (slotContext.entity() instanceof Player player){
+        if (slotContext.entity() instanceof Player player) {
             CuriosApi.addSlotModifier(super.getAttributeModifiers(slotContext, id, stack), identifier, IronboundArtefact.prefix(rsrLoc), 1, AttributeModifier.Operation.ADD_VALUE);
         }
         return super.getAttributeModifiers(slotContext, id, stack);

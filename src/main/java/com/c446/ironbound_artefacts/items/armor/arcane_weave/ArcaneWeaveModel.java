@@ -2,15 +2,13 @@ package com.c446.ironbound_artefacts.items.armor.arcane_weave;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
-import io.redspace.ironsspellbooks.entity.armor.ArchevokerArmorModel;
-import io.redspace.ironsspellbooks.item.armor.ArchevokerArmorItem;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
 
 public class ArcaneWeaveModel extends DefaultedItemGeoModel<ArcaneWeaveItem> {
 
     public ArcaneWeaveModel() {
-        super(IronboundArtefact.prefix( ""));
+        super(IronboundArtefact.prefix(""));
     }
 
     @Override

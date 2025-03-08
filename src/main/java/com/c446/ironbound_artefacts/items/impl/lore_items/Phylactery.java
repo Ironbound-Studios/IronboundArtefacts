@@ -2,7 +2,6 @@ package com.c446.ironbound_artefacts.items.impl.lore_items;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.components.KillCounterComponent;
-import com.c446.ironbound_artefacts.components.UniversalPositionComponent;
 import com.c446.ironbound_artefacts.registries.ComponentRegistry;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;

@@ -1,6 +1,5 @@
 package com.c446.ironbound_artefacts.entities.simulacrum;
 
-import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.datagen.Tags;
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
@@ -10,46 +9,35 @@ import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.effect.SummonTimer;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
-import io.redspace.ironsspellbooks.entity.mobs.SummonedPolarBear;
-import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
 import io.redspace.ironsspellbooks.entity.mobs.SupportMob;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.NeutralWizard;
 import io.redspace.ironsspellbooks.entity.mobs.goals.*;
-import io.redspace.ironsspellbooks.entity.mobs.necromancer.NecromancerEntity;
-import io.redspace.ironsspellbooks.entity.mobs.wizards.pyromancer.PyromancerEntity;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
-import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -101,8 +89,8 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
      * Don't use otherwise...
      *
      * @param pEntityType :"F": {
-     *       "tag": "minecraft:flowers"
-     *     }, the entity type.
+     *                    "tag": "minecraft:flowers"
+     *                    }, the entity type.
      * @param pLevel      : the level to spawn the entity in
      */
     public SimulacrumEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
@@ -175,17 +163,12 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         return this.level().getPlayerByUUID(this.getOwnerUUID().get());
     }
 
-    @Override
-    protected boolean shouldDropLoot() {
-        return false;
-    }
-
     public void setSummoner(Player player) {
         if (player != null) {
             this.getEntityData().set(OWNER_UUID, Optional.of(player.getUUID()));
             this.player = player;
             var inv = CuriosApi.getCuriosInventory(this);
-            if (inv.isPresent()){
+            if (inv.isPresent()) {
                 LOGGER.debug("Curios inv is present.");
             }
             if (player.level().isClientSide) {
@@ -194,6 +177,11 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             this.registerWizardGoals();
         }
 
+    }
+
+    @Override
+    protected boolean shouldDropLoot() {
+        return false;
     }
 
     @Override
@@ -375,7 +363,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         //SummonedPolarBear
 
         this.goalSelector.addGoal(1, new GenericFollowOwnerGoal(this, this::getSummoner, 0.9f, 8, 3, false, 25));
-        
+
         //this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 3.0, 4f * 1.2, this::isAlliedTo));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new GenericOwnerHurtByTargetGoal(this, this::getSummoner));
@@ -392,7 +380,6 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         this.goalSelector.addGoal(3, new PatrolNearLocationGoal(this, 30, .75f));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new WizardRecoverGoal(this));
-
 
 
     }

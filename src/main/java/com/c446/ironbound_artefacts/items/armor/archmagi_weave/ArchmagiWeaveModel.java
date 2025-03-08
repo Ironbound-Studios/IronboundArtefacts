@@ -1,8 +1,6 @@
 package com.c446.ironbound_artefacts.items.armor.archmagi_weave;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveItem;
-import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveModel;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;

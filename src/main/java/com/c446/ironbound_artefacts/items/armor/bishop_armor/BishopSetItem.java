@@ -1,11 +1,9 @@
 package com.c446.ironbound_artefacts.items.armor.bishop_armor;
 
 import com.c446.ironbound_artefacts.items.ModArmorMaterial;
-import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveModel;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.entity.armor.GenericCustomArmorRenderer;
 import io.redspace.ironsspellbooks.item.armor.ImbuableChestplateArmorItem;
-import io.redspace.ironsspellbooks.item.armor.PriestArmorItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.neoforged.api.distmarker.Dist;

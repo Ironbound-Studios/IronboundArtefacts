@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
+import static com.c446.ironbound_artefacts.registries.CustomSpellRegistry.TIME_STOP;
 import static io.redspace.ironsspellbooks.api.registry.SpellRegistry.*;
-import static com.c446.ironbound_artefacts.registries.CustomSpellRegistry.*;
 
 public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
 

@@ -1,8 +1,6 @@
 package com.c446.ironbound_artefacts.ironbound_spells.spells.enthrall;
 
-import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,6 +36,7 @@ public class EnthralledEffect extends MagicMobEffect {
             }
         }
     }
+
     public static void onTarget(LivingChangeTargetEvent event) {
         if (!(event.getNewAboutToBeSetTarget() instanceof Player player)) {
             return;

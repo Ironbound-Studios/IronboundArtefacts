@@ -1,12 +1,8 @@
 package com.c446.ironbound_artefacts.entities;
 
-import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
-import io.redspace.ironsspellbooks.entity.spells.magic_missile.MagicMissileProjectile;
-import mezz.jei.api.constants.Tags;
 import net.minecraft.core.Holder;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,6 +19,10 @@ public class AbstractHomingEntity extends AbstractMagicProjectile {
     double distancePercentage = 0.2;
     private float rayTraceDistance = 50;
 
+
+    public AbstractHomingEntity(EntityType<? extends Projectile> pEntityType, Level pLevel) {
+        super(pEntityType, pLevel);
+    }
 
     @Override
     public void trailParticles() {
@@ -45,10 +45,6 @@ public class AbstractHomingEntity extends AbstractMagicProjectile {
         return Optional.empty();
     }
 
-    public AbstractHomingEntity(EntityType<? extends Projectile> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-    }
-
 //    public AbstractHomingEntity(Level level, LivingEntity owner, float damage) {
 //        this(IBEntitiesReg.HOMING.get(), level);
 //        this.setOwner(owner);
@@ -56,7 +52,7 @@ public class AbstractHomingEntity extends AbstractMagicProjectile {
 //    }
 
     public void home() {
-        if (this.target == null){
+        if (this.target == null) {
             return;
         }
         Vec3 targetPos = target.getEyePosition();
@@ -95,7 +91,9 @@ public class AbstractHomingEntity extends AbstractMagicProjectile {
 
     @Override
     public void tick() {
-        if (this.getOwner() == null) {discard();}
+        if (this.getOwner() == null) {
+            discard();
+        }
         this.home();
         super.tick();
     }

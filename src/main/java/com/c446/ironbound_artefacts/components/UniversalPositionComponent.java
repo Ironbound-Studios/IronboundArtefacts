@@ -10,6 +10,10 @@ import java.util.Objects;
 public record UniversalPositionComponent(double x, double y, double z, String dimension) {
 
 
+    public static UniversalPositionComponent create(LivingEntity player) {
+        return new UniversalPositionComponent(player.getX(), player.getY(), player.getZ(), player.level().dimension().toString());
+    }
+
     public Vec3 getPos() {
         return new Vec3(x, y, z);
     }
@@ -25,10 +29,6 @@ public record UniversalPositionComponent(double x, double y, double z, String di
 
         }
         return null;
-    }
-
-    public static UniversalPositionComponent create(LivingEntity player) {
-        return new UniversalPositionComponent(player.getX(), player.getY(), player.getZ(), player.level().dimension().toString());
     }
 
     public void goTo(Player player) {

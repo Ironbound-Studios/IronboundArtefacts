@@ -1,15 +1,11 @@
 package com.c446.ironbound_artefacts.items.armor.archmagi_weave;
 
 import com.c446.ironbound_artefacts.items.ModArmorMaterial;
-import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveModel;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.entity.armor.GenericCustomArmorRenderer;
 import io.redspace.ironsspellbooks.item.armor.ImbuableChestplateArmorItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
-import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;

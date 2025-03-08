@@ -2,7 +2,6 @@ package com.c446.ironbound_artefacts.datagen;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
-import io.redspace.ironsspellbooks.spells.ender.StarfallSpell;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;

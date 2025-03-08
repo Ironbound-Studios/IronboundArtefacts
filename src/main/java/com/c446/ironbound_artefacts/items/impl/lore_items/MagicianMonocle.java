@@ -2,7 +2,6 @@ package com.c446.ironbound_artefacts.items.impl.lore_items;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
-import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
@@ -53,7 +52,7 @@ public class MagicianMonocle extends UserDependantCurios {
             multiplier = 2;
         }
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        attributeModifier.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.15 * Math.pow(multiplier,2), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeModifier.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.15 * Math.pow(multiplier, 2), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         return attributeModifier;
     }

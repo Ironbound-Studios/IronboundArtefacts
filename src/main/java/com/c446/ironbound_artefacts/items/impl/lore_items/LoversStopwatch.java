@@ -75,8 +75,8 @@ public class LoversStopwatch extends UserDependantCurios {
         if (slotContext.entity() != null && canEntityUseItem(slotContext.entity())) {
             multiplier *= 2;
         }
-        attributeMap.put(AttributeRegistry.COOLDOWN_REDUCTION, new AttributeModifier(id, 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));;
-        attributeMap.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));;
+        attributeMap.put(AttributeRegistry.COOLDOWN_REDUCTION, new AttributeModifier(id, 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeMap.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return attributeMap;
     }
 }

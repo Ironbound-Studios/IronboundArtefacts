@@ -11,17 +11,15 @@ import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
-import io.redspace.ironsspellbooks.registries.*;
+import io.redspace.ironsspellbooks.registries.ComponentRegistry;
+import io.redspace.ironsspellbooks.registries.ItemRegistry;
+import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @AutoSpellConfig
 public class WishSpell extends AbstractSpell {
@@ -108,7 +105,7 @@ public class WishSpell extends AbstractSpell {
         } else if (item.is(Tags.ItemTags.WISH_DUPLICABLE)) {
             return handleWishDuplicable(item);
         } else if (item.is(Items.GLASS_BOTTLE) && item.has(DataComponents.POTION_CONTENTS)) {
-            return handleHeroFeast(item, level, spellLevel,entity);
+            return handleHeroFeast(item, level, spellLevel, entity);
         } else {
             if (serverPlayer != null)
                 serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("ui.irons_spellbooks.wish.fail").withStyle(ChatFormatting.RED)));
@@ -134,7 +131,7 @@ public class WishSpell extends AbstractSpell {
         return false;
     }
 
-    private boolean summonArchmage(ItemStack item, Level level, LivingEntity caster){
+    private boolean summonArchmage(ItemStack item, Level level, LivingEntity caster) {
         var pos = caster.getLookAngle().normalize().scale(3d).add(caster.getEyePosition());
         level.addFreshEntity(new ArchmageEntity(level));
         return true;
@@ -149,7 +146,7 @@ public class WishSpell extends AbstractSpell {
                 var num = 0;
                 var selectedSpell = spells.get(num);
                 if (selectedSpell != null && selectedSpell.getSpell() != null && !Objects.equals(selectedSpell.getSpell().getSpellId(), this.getSpellId())) {
-                    if (SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).isPresent() && SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).get().is(Tags.SpellTags.WISH_UNCASTABLE)){
+                    if (SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).isPresent() && SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).get().is(Tags.SpellTags.WISH_UNCASTABLE)) {
                         serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("spell.ironbounds_artefacts.wish.invalid_spell").withStyle(ChatFormatting.RED)));
                     }
 

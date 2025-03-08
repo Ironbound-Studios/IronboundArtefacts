@@ -14,16 +14,15 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
 public class EvasionCloak extends CurioBaseItem {
+    private int cooldown = 20 * 6;
+
     public EvasionCloak(Properties properties) {
         super(properties);
     }
-
-    private int cooldown = 20 * 6;
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
@@ -33,7 +32,7 @@ public class EvasionCloak extends CurioBaseItem {
             if (slotContext.entity() != null && slotContext.entity().level() instanceof ServerLevel srLvl) {
                 slotContext.entity().addEffect(new MobEffectInstance(MobEffectRegistry.EVASION, 200, 1));
                 cooldown = 20 * 6; // Reset cooldown to prevent immediate reapplication
-                if (slotContext.entity() instanceof ServerPlayer serverPlayer){
+                if (slotContext.entity() instanceof ServerPlayer serverPlayer) {
                     serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal("you can use the thing now bozo")));
                 }
             }

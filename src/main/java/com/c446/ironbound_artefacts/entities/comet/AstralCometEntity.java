@@ -1,6 +1,5 @@
 package com.c446.ironbound_artefacts.entities.comet;
 
-import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
@@ -10,15 +9,12 @@ import io.redspace.ironsspellbooks.network.particles.FieryExplosionParticlesPack
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Explosion;
@@ -40,15 +36,15 @@ public class AstralCometEntity extends MagicFireball {
 //        this.getEntityData().set(this.SIZE_FACTOR, 1f);
     }
 
-/*
-    public float getSIZE_FACTOR() {
-        return this.getEntityData().get(SIZE_FACTOR);
-    }
+    /*
+        public float getSIZE_FACTOR() {
+            return this.getEntityData().get(SIZE_FACTOR);
+        }
 
-    public void setSIZE_FACTOR(Float size) {
-        this.getEntityData().set(SIZE_FACTOR, size);
-    }
-*/
+        public void setSIZE_FACTOR(Float size) {
+            this.getEntityData().set(SIZE_FACTOR, size);
+        }
+    */
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
         //pBuilder.define(SIZE_FACTOR, 1f);

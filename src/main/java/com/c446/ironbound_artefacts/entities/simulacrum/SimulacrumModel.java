@@ -6,7 +6,6 @@ import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.Transf
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.WalkAnimationState;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.AnimationState;
@@ -44,7 +43,7 @@ public class SimulacrumModel<K extends SimulacrumEntity> extends DefaultedEntity
             GeoBone rightLeg = this.getAnimationProcessor().getBone("right_leg");
             GeoBone leftLeg = this.getAnimationProcessor().getBone("left_leg");
             if (!entity.isAnimating() || entity.shouldAlwaysAnimateHead()) {
-                this.transformStack.pushRotation(head, Mth.lerp(partialTick, -entity.xRotO, -entity.getXRot()) * ((float)Math.PI / 180F), Mth.lerp(partialTick, Mth.wrapDegrees(-entity.yHeadRotO + entity.yBodyRotO) * ((float)Math.PI / 180F), Mth.wrapDegrees(-entity.yHeadRot + entity.yBodyRot) * ((float)Math.PI / 180F)), 0.0F);
+                this.transformStack.pushRotation(head, Mth.lerp(partialTick, -entity.xRotO, -entity.getXRot()) * ((float) Math.PI / 180F), Mth.lerp(partialTick, Mth.wrapDegrees(-entity.yHeadRotO + entity.yBodyRotO) * ((float) Math.PI / 180F), Mth.wrapDegrees(-entity.yHeadRot + entity.yBodyRot) * ((float) Math.PI / 180F)), 0.0F);
             }
 
             WalkAnimationState walkAnimationState = entity.walkAnimation;
@@ -64,7 +63,7 @@ public class SimulacrumModel<K extends SimulacrumEntity> extends DefaultedEntity
 
             float f = 1.0F;
             if (entity.getFallFlyingTicks() > 4) {
-                f = (float)entity.getDeltaMovement().lengthSqr();
+                f = (float) entity.getDeltaMovement().lengthSqr();
                 f /= 0.2F;
                 f *= f * f;
             }
@@ -74,37 +73,37 @@ public class SimulacrumModel<K extends SimulacrumEntity> extends DefaultedEntity
             }
 
             if (entity.isPassenger() && entity.getVehicle().shouldRiderSit()) {
-                this.transformStack.pushRotation(rightLeg, 1.4137167F, (-(float)Math.PI / 10F), -0.07853982F);
-                this.transformStack.pushRotation(leftLeg, 1.4137167F, ((float)Math.PI / 10F), 0.07853982F);
+                this.transformStack.pushRotation(rightLeg, 1.4137167F, (-(float) Math.PI / 10F), -0.07853982F);
+                this.transformStack.pushRotation(leftLeg, 1.4137167F, ((float) Math.PI / 10F), 0.07853982F);
             } else if (!entity.isAnimating() || entity.shouldAlwaysAnimateLegs()) {
                 float strength = 0.75F;
-                Vec3 facing = entity.getForward().multiply((double)1.0F, (double)0.0F, (double)1.0F).normalize();
-                Vec3 momentum = entity.getDeltaMovement().multiply((double)1.0F, (double)0.0F, (double)1.0F).normalize();
-                Vec3 facingOrth = new Vec3(-facing.z, (double)0.0F, facing.x);
-                float directionForward = (float)facing.dot(momentum);
-                float directionSide = (float)facingOrth.dot(momentum) * 0.35F;
+                Vec3 facing = entity.getForward().multiply(1.0F, 0.0F, 1.0F).normalize();
+                Vec3 momentum = entity.getDeltaMovement().multiply(1.0F, 0.0F, 1.0F).normalize();
+                Vec3 facingOrth = new Vec3(-facing.z, 0.0F, facing.x);
+                float directionForward = (float) facing.dot(momentum);
+                float directionSide = (float) facingOrth.dot(momentum) * 0.35F;
                 float rightLateral = -Mth.sin(pLimbSwing * 0.6662F) * 4.0F * pLimbSwingAmount;
-                float leftLateral = -Mth.sin(pLimbSwing * 0.6662F - (float)Math.PI) * 4.0F * pLimbSwingAmount;
+                float leftLateral = -Mth.sin(pLimbSwing * 0.6662F - (float) Math.PI) * 4.0F * pLimbSwingAmount;
                 this.transformStack.pushPosition(rightLeg, rightLateral * directionSide, Mth.cos(pLimbSwing * 0.6662F) * 4.0F * strength * pLimbSwingAmount, rightLateral * directionForward);
                 this.transformStack.pushRotation(rightLeg, Mth.cos(pLimbSwing * 0.6662F) * 1.4F * pLimbSwingAmount * strength, 0.0F, 0.0F);
-                this.transformStack.pushPosition(leftLeg, leftLateral * directionSide, Mth.cos(pLimbSwing * 0.6662F - (float)Math.PI) * 4.0F * strength * pLimbSwingAmount, leftLateral * directionForward);
-                this.transformStack.pushRotation(leftLeg, Mth.cos(pLimbSwing * 0.6662F + (float)Math.PI) * 1.4F * pLimbSwingAmount * strength, 0.0F, 0.0F);
+                this.transformStack.pushPosition(leftLeg, leftLateral * directionSide, Mth.cos(pLimbSwing * 0.6662F - (float) Math.PI) * 4.0F * strength * pLimbSwingAmount, leftLateral * directionForward);
+                this.transformStack.pushRotation(leftLeg, Mth.cos(pLimbSwing * 0.6662F + (float) Math.PI) * 1.4F * pLimbSwingAmount * strength, 0.0F, 0.0F);
                 if (entity.bobBodyWhileWalking()) {
-                    this.transformStack.pushPosition(body, 0.0F, Mth.abs(Mth.cos((pLimbSwing * 1.2662F - ((float)Math.PI / 2F)) * 0.5F)) * 2.0F * strength * pLimbSwingAmount, 0.0F);
+                    this.transformStack.pushPosition(body, 0.0F, Mth.abs(Mth.cos((pLimbSwing * 1.2662F - ((float) Math.PI / 2F)) * 0.5F)) * 2.0F * strength * pLimbSwingAmount, 0.0F);
                 }
             }
 
             if (!entity.isAnimating()) {
-                this.transformStack.pushRotationWithBase(rightArm, Mth.cos(pLimbSwing * 0.6662F + (float)Math.PI) * 2.0F * pLimbSwingAmount * 0.5F / f, 0.0F, 0.0F);
+                this.transformStack.pushRotationWithBase(rightArm, Mth.cos(pLimbSwing * 0.6662F + (float) Math.PI) * 2.0F * pLimbSwingAmount * 0.5F / f, 0.0F, 0.0F);
                 this.transformStack.pushRotationWithBase(leftArm, Mth.cos(pLimbSwing * 0.6662F) * 2.0F * pLimbSwingAmount * 0.5F / f, 0.0F, 0.0F);
                 this.bobBone(rightArm, entity.tickCount, 1.0F);
                 this.bobBone(leftArm, entity.tickCount, -1.0F);
                 if (entity.isDrinkingPotion()) {
-                    this.transformStack.pushRotation(entity.isLeftHanded() ? leftArm : rightArm, 0.61086524F, (float)(entity.isLeftHanded() ? -25 : 25) * ((float)Math.PI / 180F), (float)(entity.isLeftHanded() ? 15 : -15) * ((float)Math.PI / 180F));
+                    this.transformStack.pushRotation(entity.isLeftHanded() ? leftArm : rightArm, 0.61086524F, (float) (entity.isLeftHanded() ? -25 : 25) * ((float) Math.PI / 180F), (float) (entity.isLeftHanded() ? 15 : -15) * ((float) Math.PI / 180F));
                 }
             } else if (entity.shouldPointArmsWhileCasting() && entity.isCasting()) {
-                this.transformStack.pushRotation(leftArm, leftArm.getRotX() - entity.getXRot() * ((float)Math.PI / 180F), leftArm.getRotY(), leftArm.getRotZ());
-                this.transformStack.pushRotation(rightArm, rightArm.getRotX() - entity.getXRot() * ((float)Math.PI / 180F), rightArm.getRotY(), rightArm.getRotZ());
+                this.transformStack.pushRotation(leftArm, leftArm.getRotX() - entity.getXRot() * ((float) Math.PI / 180F), leftArm.getRotY(), leftArm.getRotZ());
+                this.transformStack.pushRotation(rightArm, rightArm.getRotX() - entity.getXRot() * ((float) Math.PI / 180F), rightArm.getRotY(), rightArm.getRotZ());
             }
 
             this.transformStack.popStack();
@@ -112,8 +111,8 @@ public class SimulacrumModel<K extends SimulacrumEntity> extends DefaultedEntity
     }
 
     protected void bobBone(GeoBone bone, int offset, float multiplier) {
-        float z = multiplier * (Mth.cos((float)offset * 0.09F) * 0.05F + 0.05F);
-        float x = multiplier * Mth.sin((float)offset * 0.067F) * 0.05F;
+        float z = multiplier * (Mth.cos((float) offset * 0.09F) * 0.05F + 0.05F);
+        float x = multiplier * Mth.sin((float) offset * 0.067F) * 0.05F;
         this.transformStack.pushRotation(bone, x, 0.0F, z);
     }
 }

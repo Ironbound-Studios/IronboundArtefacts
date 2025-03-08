@@ -38,8 +38,8 @@ public class DeckOfAllThings extends UserDependantCurios {
             //
 
 
-            while (spell instanceof NoneSpell ||spell instanceof PortalSpell ||spell instanceof SpectralHammerSpell){
-                spell = (AbstractSpell) spells[level.random.nextIntBetweenInclusive(0,spells.length)];
+            while (spell instanceof NoneSpell || spell instanceof PortalSpell || spell instanceof SpectralHammerSpell) {
+                spell = (AbstractSpell) spells[level.random.nextIntBetweenInclusive(0, spells.length)];
             }
 
             spell.castSpell(level, spell.getMaxLevel(), serverPlayer, CastSource.SCROLL, false);

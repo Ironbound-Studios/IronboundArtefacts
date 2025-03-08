@@ -1,8 +1,8 @@
 package com.c446.ironbound_artefacts.registries;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.attachment.IBSpellCasterData;
 import com.c446.ironbound_artefacts.attachment.FirstLoginData;
+import com.c446.ironbound_artefacts.attachment.IBSpellCasterData;
 import com.c446.ironbound_artefacts.attachment.SchoolAffinityComponent;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
