@@ -28,6 +28,5 @@ src/main/resources/assets/ironbounds_artefacts/textures/item/VisualStudioSetup.e
 *.exe
 .gitignore
 src/main/java/com/vred_weapons/vredWeaponryStuff.java
-/src/main/java/com/vred_weapons
-src/main/java/com/c446/ironbound_artefacts/vredWeaponryStuff.java.java
+/src/main/java/com/vred_weapons/*
 src/main/java/com/c446/ironbound_artefacts/vredWeaponryStuff.java
