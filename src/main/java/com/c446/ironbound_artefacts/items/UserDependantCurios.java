@@ -1,12 +1,14 @@
 package com.c446.ironbound_artefacts.items;
 
-import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import net.minecraft.world.entity.Entity;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.UUID;
 
 public abstract class UserDependantCurios extends BaseItem implements ICurioItem {
+    // not here, let's move up one class
+    public UUID user;
+
     public UserDependantCurios(Properties p) {
         super(p);
     }
@@ -15,12 +17,10 @@ public abstract class UserDependantCurios extends BaseItem implements ICurioItem
         super(p, showEnch);
     }
 
-    public boolean canEntityUseItem(Entity entity){
+    public boolean canEntityUseItem(Entity entity) {
         return false;
-    //these two get replaced
+        //these two get replaced
     }
-    // not here, let's move up one class
-    public UUID user;
 }
 /*
 * DONE :

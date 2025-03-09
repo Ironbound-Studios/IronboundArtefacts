@@ -1,7 +1,6 @@
 package com.c446.ironbound_artefacts.items.impl.lore_items;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import io.redspace.ironsspellbooks.item.CastingItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
@@ -10,7 +9,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 

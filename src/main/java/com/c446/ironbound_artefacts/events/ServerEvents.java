@@ -1,64 +1,39 @@
 package com.c446.ironbound_artefacts.events;
 
 
-import com.c446.ironbound_artefacts.Config;
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.attachment.FirstLoginData;
 import com.c446.ironbound_artefacts.components.KillCounterComponent;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.enthrall.DominatedEffectInstance;
-import com.c446.ironbound_artefacts.ironbound_spells.spells.enthrall.EnthralledEffect;
-import com.c446.ironbound_artefacts.items.UserDependantCurios;
-import com.c446.ironbound_artefacts.items.impl.lore_items.LichCrown;
 import com.c446.ironbound_artefacts.items.impl.lore_items.Phylactery;
-import com.c446.ironbound_artefacts.registries.*;
+import com.c446.ironbound_artefacts.registries.AttachmentRegistry;
+import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.HashMultimap;
-import dev.shadowsoffire.apothic_attributes.impl.AttributeEvents;
 import io.redspace.ironsspellbooks.api.events.*;
-import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
-import io.redspace.ironsspellbooks.api.events.SpellSummonEvent;
-import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
-import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
-import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
-import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
-import io.redspace.ironsspellbooks.api.spells.SchoolType;
-import io.redspace.ironsspellbooks.api.spells.SpellData;
-import io.redspace.ironsspellbooks.config.ServerConfigs;
-import io.redspace.ironsspellbooks.effect.AngelWingsEffect;
-import io.redspace.ironsspellbooks.effect.ThunderstormEffect;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
-import io.redspace.ironsspellbooks.entity.mobs.SummonedSkeleton;
 import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
-import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob;
-import io.redspace.ironsspellbooks.item.SpellBook;
-import io.redspace.ironsspellbooks.item.UpgradeOrbItem;
-import io.redspace.ironsspellbooks.registries.*;
-import io.redspace.ironsspellbooks.registries.ComponentRegistry;
+import io.redspace.ironsspellbooks.registries.EntityRegistry;
+import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
-import io.redspace.ironsspellbooks.spells.holy.AngelWingsSpell;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.bossevents.CustomBossEvent;
-import net.minecraft.server.commands.BossBarCommands;
-import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -66,37 +41,23 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
-import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
-import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.event.server.ServerStoppingEvent;
-import net.neoforged.neoforge.event.tick.EntityTickEvent;
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotResult;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Predicate;
 
 import static com.c446.ironbound_artefacts.IronboundArtefact.ContributorUUIDS.*;
 import static com.c446.ironbound_artefacts.registries.ComponentRegistry.KILL_COUNT_COMPONENT;
 import static com.c446.ironbound_artefacts.registries.EffectsRegistry.ENTHRALLED;
 import static com.c446.ironbound_artefacts.registries.ItemRegistry.*;
-import static net.minecraft.tags.EntityTypeTags.UNDEAD;
 
 @EventBusSubscriber
 public class ServerEvents {
@@ -148,11 +109,20 @@ public class ServerEvents {
             CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
                 var slot = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
                 if (slot.isPresent()) {
+                    var c = Objects.requireNonNull(slot.get().stack().get(KILL_COUNT_COMPONENT)).killCount();
+                    final float MAX_SOULS = 0xffffffff;
+                    final float MIN_MULTIPLIER = 0.5f;
+                    final float MAX_MULTIPLIER = 2.0f;
+
+                    var scaledValue = MIN_MULTIPLIER + ((MAX_MULTIPLIER - MIN_MULTIPLIER) * (c / MAX_SOULS));
+                    scaledValue = Math.min(MAX_MULTIPLIER, Math.max(MIN_MULTIPLIER, scaledValue)); // Ensure scaledValue is within bounds
+
+                    var sp = (event.getEntity().getMaxHealth() * scaledValue);
                     var ring = slot.get();
                     if (ring.stack().has(KILL_COUNT_COMPONENT)) {
-                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(Objects.requireNonNull(ring.stack().get(KILL_COUNT_COMPONENT)).killCount() + 1));
+                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent((Objects.requireNonNull(ring.stack().get(KILL_COUNT_COMPONENT)).killCount() + sp)));
                     } else {
-                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(1));
+                        ring.stack().set(KILL_COUNT_COMPONENT, new KillCounterComponent(sp));
                     }
                 }
             });
@@ -187,16 +157,18 @@ public class ServerEvents {
                 var phylacteries = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
                 if (player instanceof ServerPlayer serverPlayer && phylacteries.isPresent() && phylacteries.get().stack().has(KILL_COUNT_COMPONENT)) {
                     var killCount = Objects.requireNonNull(phylacteries.get().stack().get(KILL_COUNT_COMPONENT)).killCount();
-                    if (killCount >= 5) {
+                    if (killCount >= 20) {
                         var stack = phylacteries.get().stack();
                         if (!player.getCooldowns().isOnCooldown(stack.getItem())) {
-                            stack.set(KILL_COUNT_COMPONENT, new KillCounterComponent(Math.max(0, killCount * 2 / 3 - 5)));
+                            stack.set(KILL_COUNT_COMPONENT, new KillCounterComponent((int) Math.max(0, killCount * 0.90f - 20f))); // approaches 5% efficiency as we approach infinity
                             if (Objects.requireNonNull(serverPlayer.getServer()).getLevel(serverPlayer.getRespawnDimension()) != null && serverPlayer.getRespawnPosition() != null) {
                                 var dim = serverPlayer.getServer().getLevel(serverPlayer.getRespawnDimension());
 
                                 if (dim != null) {
                                     serverPlayer.changeDimension(new DimensionTransition(dim, new Vec3(serverPlayer.getRespawnPosition().getX(), serverPlayer.getRespawnPosition().getY(), serverPlayer.getRespawnPosition().getZ()), Vec3.ZERO, serverPlayer.getXRot(), serverPlayer.getYRot(), false, DimensionTransition.DO_NOTHING));
-                                    player.setHealth((float) (player.getMaxHealth() * 0.5));
+                                    player.setHealth((float) (player.getMaxHealth() * 0.7));
+                                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120)); // No insta killing after dying
+                                    player.addEffect(new MobEffectInstance(MobEffectRegistry.INSTANT_MANA, 120));
                                     event.setCanceled(true);
                                 }
                             }
@@ -243,7 +215,7 @@ public class ServerEvents {
     public static void grantItemsOnJoin(PlayerEvent.PlayerLoggedInEvent event) {
         var uuid = event.getEntity().getStringUUID();
         var entity = event.getEntity();
-        
+
         if (IronboundArtefact.ContributorUUIDS.CONTRIBUTOR_LIST.contains(entity.getStringUUID()) && !entity.getData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS).hasLoggedIn) {
             event.getEntity().setData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS, new FirstLoginData().set(true));
 

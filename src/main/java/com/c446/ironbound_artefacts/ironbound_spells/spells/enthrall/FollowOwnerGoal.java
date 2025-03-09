@@ -14,12 +14,12 @@ import java.util.EnumSet;
 
 public class FollowOwnerGoal extends Goal {
     private final Mob mob;
+    private final double speedModifier;
+    private final float stopDistance;
     @Nullable
     public LivingEntity followingMob;
-    private final double speedModifier;
     private PathNavigation navigation;
     private int timeToRecalcPath;
-    private final float stopDistance;
     private float oldWaterCost;
 
     /**
@@ -84,7 +84,7 @@ public class FollowOwnerGoal extends Goal {
      * Keep ticking a continuous task that has already been started
      */
     public void tick() {
-        if (this.followingMob != null && !this.mob.isLeashed() && Math.abs(this.followingMob.distanceTo(this.mob))>=6) {
+        if (this.followingMob != null && !this.mob.isLeashed() && Math.abs(this.followingMob.distanceTo(this.mob)) >= 6) {
             this.mob.getLookControl().setLookAt(this.followingMob, 10.0F, (float) this.mob.getMaxHeadXRot());
             if (--this.timeToRecalcPath <= 0) {
                 this.navigation = this.mob.getNavigation();

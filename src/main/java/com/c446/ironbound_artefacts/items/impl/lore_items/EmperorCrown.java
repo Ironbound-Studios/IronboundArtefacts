@@ -1,13 +1,9 @@
 package com.c446.ironbound_artefacts.items.impl.lore_items;
 
-import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
-import io.redspace.ironsspellbooks.api.item.UpgradeData;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
-import io.redspace.ironsspellbooks.registries.DataAttachmentRegistry;
-import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;

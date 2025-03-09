@@ -15,11 +15,15 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import static com.c446.ironbound_artefacts.IronboundArtefact.LOGGER;
 import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
-import static io.redspace.ironsspellbooks.registries.ItemRegistry.*;
 
 public class ModSetup {
+    public ModSetup(IEventBus modEventBus, ModContainer modContainer) {
+        ModSetup.register(modEventBus);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modEventBus.addListener(this::setup);
+    }
+
     public static void register(IEventBus eventBus) {
 
         ItemRegistry.ITEMS.register(eventBus);
@@ -32,12 +36,6 @@ public class ModSetup {
         ComponentRegistry.register(eventBus);
         //ArmorMaterials.MATERIALS.register(eventBus);
         ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);
-    }
-
-    public ModSetup(IEventBus modEventBus, ModContainer modContainer) {
-        ModSetup.register(modEventBus);
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        modEventBus.addListener(this::setup);
     }
 
     public static ResourceLocation prefix(String path) {
@@ -53,11 +51,11 @@ public class ModSetup {
         public static final DeferredRegister<CreativeModeTab> CREATIVE_MOD_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
         public static final DeferredHolder<CreativeModeTab, CreativeModeTab> THINGS = CREATIVE_MOD_TABS.register("ironbound_artefacts", () ->
-                CreativeModeTab.builder()
-                        .withTabsAfter(CreativeTabRegistry.MATERIALS_TAB.getKey())
-                        .title(Component.translatable("tab.ironbounds_artefacts.curios"))
-                        .icon(() -> new ItemStack(ItemRegistry.THREE_WISHES))
-                        .displayItems((enabledFeatures, entries) -> {
+                        CreativeModeTab.builder()
+                                .withTabsAfter(CreativeTabRegistry.MATERIALS_TAB.getKey())
+                                .title(Component.translatable("tab.ironbounds_artefacts.curios"))
+                                .icon(() -> new ItemStack(ItemRegistry.THREE_WISHES))
+                                .displayItems((enabledFeatures, entries) -> {
 //                            //entries.accept(ItemRegistry.DEATH_AMULET.get());
 //                            //entries.accept(ItemRegistry.DEVILS_FINGER.get());
 //                            //entries.accept(ItemRegistry.MAGICIANS_MONOCLE.get());
@@ -84,13 +82,13 @@ public class ModSetup {
 //                            entries.accept(ItemRegistry.WEAVE_CHEST_PLATE.get());
 //                            entries.accept(ItemRegistry.WEAVE_LEGGINGS.get());
 //                            entries.accept(ItemRegistry.WEAVE_BOOTS.get());
-                            ItemRegistry.ITEMS.getEntries().forEach(i->{
-                                if (!i.is(Tags.Items.HIDDEN_FROM_RECIPE_VIEWERS)) {
-                                    entries.accept(i.get());
-                                }
-                            });
-                        })
-                        .build()
+                                    ItemRegistry.ITEMS.getEntries().forEach(i -> {
+                                        if (!i.is(Tags.Items.HIDDEN_FROM_RECIPE_VIEWERS)) {
+                                            entries.accept(i.get());
+                                        }
+                                    });
+                                })
+                                .build()
         );
     }
 }

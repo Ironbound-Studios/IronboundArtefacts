@@ -1,4 +1,5 @@
 package com.c446.ironbound_artefacts;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -7,7 +8,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.

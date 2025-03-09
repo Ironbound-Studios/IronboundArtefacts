@@ -38,7 +38,7 @@ public class LichCrown extends UserDependantCurios {
         NeoForge.EVENT_BUS.addListener(LichCrown::doLichCrownStuff);
     }
 
-    public static void doLichCrownStuff(LivingChangeTargetEvent event){
+    public static void doLichCrownStuff(LivingChangeTargetEvent event) {
         AtomicBoolean isCrownPresent = new AtomicBoolean(false);
 
         if (event.getNewAboutToBeSetTarget() instanceof Player player) {

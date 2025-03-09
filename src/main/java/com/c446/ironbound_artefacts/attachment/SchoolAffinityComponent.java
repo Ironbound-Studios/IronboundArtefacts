@@ -6,17 +6,15 @@ import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.UnknownNullability;
-import shadows.apotheosis.adventure.boss.BossEvents;
 
 public class SchoolAffinityComponent implements INBTSerializable<CompoundTag> {
-    public String school= "";
+    public String school = "";
 
-    public static SchoolType getSchool(Player player){
-        if (player.hasData(AttachmentRegistry.MARKOHESHKIR_ATTACHMENT)){
+    public static SchoolType getSchool(Player player) {
+        if (player.hasData(AttachmentRegistry.MARKOHESHKIR_ATTACHMENT)) {
             return SchoolRegistry.getSchool(ResourceLocation.parse(player.getData(AttachmentRegistry.MARKOHESHKIR_ATTACHMENT).school));
         }
         return null;
@@ -31,6 +29,6 @@ public class SchoolAffinityComponent implements INBTSerializable<CompoundTag> {
 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-        this.school=nbt.getString("school");
+        this.school = nbt.getString("school");
     }
 }

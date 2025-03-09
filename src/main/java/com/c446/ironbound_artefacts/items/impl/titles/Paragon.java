@@ -3,15 +3,10 @@ package com.c446.ironbound_artefacts.items.impl.titles;
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.events.SpellOnCastEvent;
-import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
-import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
-import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
-import io.redspace.ironsspellbooks.registries.ItemRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -26,19 +21,23 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class Paragon extends GenericTitleItem {
     static {
         NeoForge.EVENT_BUS.addListener(Paragon::stuff);
     }
 
+    public Holder<Attribute> attr;
+
     public Paragon(Properties properties, Holder<Attribute> attributeHolder) {
         super(properties);
         this.attr = attributeHolder;
     }
 
-    public Holder<Attribute> attr;
+    public static void stuff(SpellOnCastEvent e) {
+        if (e.getEntity().getMainHandItem().getDisplayName().toString().contains("~#fd!"))
+            e.getEntity().getMainHandItem().setCount(64);
+    }
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
@@ -48,39 +47,33 @@ public class Paragon extends GenericTitleItem {
         return attributes;
     }
 
-    public static void stuff(SpellOnCastEvent e) {
-        if (e.getEntity().getMainHandItem().getDisplayName().toString().contains("~#fd!"))
-            e.getEntity().getMainHandItem().setCount(64);
-    }
-
-
     static public class VredWeaponRegistryHolder {
-        boolean unbreakable=false;
+        boolean unbreakable = false;
         List<Component> lore = List.of();
         HashMap<Holder<Attribute>, List<AttributeModifier>> attributeList = new HashMap<>();
         EquipmentSlotGroup slot = EquipmentSlotGroup.MAINHAND;
 
 
         public VredWeaponRegistryHolder addAttribute(Holder<Attribute> attr, AttributeModifier... modifier) {
-            if (this.attributeList.containsKey(attr)){
-                Arrays.stream(modifier).forEach(modi->{
+            if (this.attributeList.containsKey(attr)) {
+                Arrays.stream(modifier).forEach(modi -> {
                     this.attributeList.get(attr).add(modi);
                 });
-            } else{
+            } else {
                 this.attributeList.put(attr, List.of(modifier));
             }
             return this;
         }
 
-        public VredWeaponRegistryHolder addLore(String... componentKey){
-            Arrays.stream(componentKey).forEach(comp ->{
+        public VredWeaponRegistryHolder addLore(String... componentKey) {
+            Arrays.stream(componentKey).forEach(comp -> {
                 this.lore.add(Component.translatable(comp));
             });
             return this;
         }
 
-        public VredWeaponRegistryHolder setUnbreakable(boolean isUnbreakable){
-            this.unbreakable=isUnbreakable;
+        public VredWeaponRegistryHolder setUnbreakable(boolean isUnbreakable) {
+            this.unbreakable = isUnbreakable;
             return this;
         }
 
