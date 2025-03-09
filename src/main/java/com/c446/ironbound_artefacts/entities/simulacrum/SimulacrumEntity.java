@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.entities.simulacrum;
 
 import com.c446.ironbound_artefacts.datagen.Tags;
+import io.redspace.pvp_flagging.core.PlayerFlagManager;
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
@@ -117,7 +118,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
 
     @Override
     public boolean isAngryAt(LivingEntity pTarget) {
-        if (pTarget instanceof Player player && player.equals(this.getSummoner())) {
+        if (pTarget instanceof Player player && player.equals(this.getSummoner())|PlayerFlagManager.INSTANCE.isPlayerFlagged(player)) {
             return false;
         }
         return super.isAngryAt(pTarget);
