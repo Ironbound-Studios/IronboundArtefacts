@@ -14,6 +14,8 @@ import com.google.common.collect.HashMultimap;
 import io.redspace.ironsspellbooks.api.events.*;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.damage.DamageSources;
+import io.redspace.ironsspellbooks.damage.SpellDamageSource;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
 import io.redspace.ironsspellbooks.registries.EntityRegistry;
@@ -21,6 +23,7 @@ import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -199,7 +202,17 @@ public class ServerEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onLivingHurtEvent(LivingDamageEvent.Pre event) {
+        var victim = event.getEntity();
+        var attacker = event.getSource().getEntity();
+        boolean pvp = victim instanceof ServerPlayer && attacker instanceof SimulacrumEntity;
+        if(pvp){
+            DamageSources.applyDamage(victim,event.getOriginalDamage(), DamageSources.get(victim.level(),DamageTypes.MAGIC));
+            event.setNewDamage(0);
 
+        }
+    }
 //    @SubscribeEvent
 //    static public void tick(PlayerTickEvent.Pre e) {
 //        e.getEntity().getMainHandItem().getAttributeModifiers().forEach(EquipmentSlotGroup.MAINHAND, (a, b) -> {
