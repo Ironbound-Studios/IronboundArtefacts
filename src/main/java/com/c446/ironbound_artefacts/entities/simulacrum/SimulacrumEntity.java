@@ -4,6 +4,7 @@ import com.c446.ironbound_artefacts.datagen.Tags;
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
+import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
@@ -323,7 +324,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     protected void registerWizardGoals() {
         this.goalSelector.removeAllGoals(a -> a instanceof WizardAttackGoal || a instanceof WizardSupportGoal<?>);
         if (this.getSummoner() instanceof Player player) {
-            this.goalSelector.addGoal(2, new WizardAttackGoal(this, 1.25f, 25, 60).setSpells(
+            this.goalSelector.addGoal(2, new WizardAttackGoal(this, 1.25f, (int) (0.5*60/(this.getSummoner().getAttributeValue(AttributeRegistry.COOLDOWN_REDUCTION))), (int) (60/this.getSummoner().getAttributeValue(AttributeRegistry.COOLDOWN_REDUCTION))).setSpells(
                     getOffensiveSpellsFromList(simpleGetSpells(player), player),
                     getDefensiveSpells(simpleGetSpells(player), player),
                     getMovementSpells(simpleGetSpells(player), player),
@@ -363,7 +364,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         //SummonedPolarBear
 
         this.goalSelector.addGoal(1, new GenericFollowOwnerGoal(this, this::getSummoner, 0.9f, 8, 3, false, 25));
-
+        
         //this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 3.0, 4f * 1.2, this::isAlliedTo));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new GenericOwnerHurtByTargetGoal(this, this::getSummoner));
@@ -380,8 +381,6 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         this.goalSelector.addGoal(3, new PatrolNearLocationGoal(this, 30, .75f));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(10, new WizardRecoverGoal(this));
-
-
     }
 
     public ResourceLocation getSkinTextureLocation() {

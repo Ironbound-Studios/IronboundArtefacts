@@ -152,6 +152,7 @@ dependencies {
 
     //localRuntime "curse.maven:better-combat-by-daedelus-639842:5723092"
     localRuntime "curse.maven:cloth-config-348521:5623420"
+    //TODO: remove this
 
 }
 

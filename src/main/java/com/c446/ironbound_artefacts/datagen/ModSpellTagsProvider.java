@@ -16,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import static com.c446.ironbound_artefacts.registries.CustomSpellRegistry.TIME_STOP;
+import static com.c446.ironbound_artefacts.registries.CustomSpellRegistry.WISH;
 import static io.redspace.ironsspellbooks.api.registry.SpellRegistry.*;
 
 public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
@@ -61,6 +62,10 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
                 .add(k(ASCENSION_SPELL.get().getSpellId()))
                 .add(k(BURNING_DASH_SPELL.get().getSpellId()));
 
+        tag(Tags.SpellTags.WISH_UNCASTABLE)
+                .add(k(TIME_STOP))
+                .add(k(WISH));
+
         tag(Tags.SpellTags.DEFENSIVE_SPELL)
                 .add(k(ABYSSAL_SHROUD_SPELL.get()))
                 .add(k(OAKSKIN_SPELL.get()))
@@ -73,7 +78,7 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
         ;
 
         tag(Tags.SpellTags.OFFENSIVE_SPELL)
-                .add(k("endersequipment:supernova"))
+                .addOptional(ResourceLocation.parse("endersequipment:supernova"))
 //                .add(getKey(SpellRegistry.ACID_ORB_SPELL.get()))
                 .add(k(ACUPUNCTURE_SPELL.get()))
                 .add(k(BALL_LIGHTNING_SPELL.get()))

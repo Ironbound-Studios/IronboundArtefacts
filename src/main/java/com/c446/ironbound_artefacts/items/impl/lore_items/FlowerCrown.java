@@ -8,6 +8,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -15,15 +17,16 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
 public class FlowerCrown extends UserDependantCurios {
-    static {
-        //   net.alshanex.alshanex_familiars.spells.ShadowSummonSpell
-    }
-
-    int timeOnGrass = 0;
-
     public FlowerCrown(Properties p) {
         super(p);
     }
+
+    @Override
+    public boolean canEntityUseItem(Entity entity) {
+        return true;
+    }
+
+    int timeOnGrass = 0;
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {

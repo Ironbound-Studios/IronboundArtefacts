@@ -2,6 +2,7 @@ package com.c446.ironbound_artefacts.items.impl;
 
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import com.google.common.collect.Multimap;
+import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -9,7 +10,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 
-public class TestItem extends UserDependantCurios {
+public class TestItem extends CurioBaseItem {
     public TestItem(Properties p) {
         super(p);
     }

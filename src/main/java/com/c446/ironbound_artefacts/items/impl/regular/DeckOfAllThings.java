@@ -5,6 +5,7 @@ import com.c446.ironbound_artefacts.registries.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.CastSource;
+import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.spells.NoneSpell;
 import io.redspace.ironsspellbooks.spells.ender.PortalSpell;
 import io.redspace.ironsspellbooks.spells.evocation.SpectralHammerSpell;
@@ -18,7 +19,7 @@ import net.minecraft.world.level.Level;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
-public class DeckOfAllThings extends UserDependantCurios {
+public class DeckOfAllThings extends CurioBaseItem {
     public DeckOfAllThings(Properties p) {
         super(p);
     }

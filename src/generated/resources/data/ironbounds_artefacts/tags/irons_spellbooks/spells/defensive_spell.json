@@ -6,6 +6,10 @@
     "irons_spellbooks:charge",
     "irons_spellbooks:haste",
     "irons_spellbooks:heal",
-    "irons_spellbooks:greater_heal"
+    "irons_spellbooks:greater_heal",
+    {
+      "id": "discerning_the_eldritch:otherworldly_presence",
+      "required": false
+    }
   ]
 }

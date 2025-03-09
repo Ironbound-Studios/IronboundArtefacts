@@ -17,10 +17,9 @@ public abstract class UserDependantCurios extends BaseItem implements ICurioItem
         super(p, showEnch);
     }
 
-    public boolean canEntityUseItem(Entity entity) {
-        return false;
-        //these two get replaced
-    }
+    public abstract boolean canEntityUseItem(Entity entity);
+
+    // not here, let's move up one class
 }
 /*
 * DONE :

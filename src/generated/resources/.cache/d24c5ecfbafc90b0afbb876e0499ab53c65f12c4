@@ -1,6 +1,8 @@
-// 1.21	2025-02-26T02:53:57.193516	Tags for irons_spellbooks:spells mod id ironbounds_artefacts
-7460afe6131daa419d4216f25d8ca8a268f54ce7 data/ironbounds_artefacts/tags/irons_spellbooks/spells/defensive_spell.json
+// 1.21	2025-03-09T16:57:57.9105659	Tags for irons_spellbooks:spells mod id ironbounds_artefacts
+2f81709405249e89fb74449b5b0d96ee758716b0 data/ironbounds_artefacts/tags/irons_spellbooks/spells/defensive_spell.json
 f9cbe396e84c8436f332f794edc8f3936ba94387 data/ironbounds_artefacts/tags/irons_spellbooks/spells/mouvement_spell.json
-d0fbcbfe35917c4f22997e126d563bd6632b5d30 data/ironbounds_artefacts/tags/irons_spellbooks/spells/offensive_spell.json
+f90deea7ed0b892dd43bea4b26f3457847743c40 data/ironbounds_artefacts/tags/irons_spellbooks/spells/offensive_spell.json
 3bddf08a78b3e8a9c434fb9d6445577c384113b7 data/ironbounds_artefacts/tags/irons_spellbooks/spells/support_spell.json
 daabff4be86c185e977275737c22e50b6ca88489 data/ironbounds_artefacts/tags/irons_spellbooks/spells/utility_spell.json
+8e062c1d1e33b5f95fee9ed7ab87edca4a0f8637 data/ironbounds_artefacts/tags/irons_spellbooks/spells/wish_banned.json
+9124651b3b990b9973894cfcfe223111c5a2c04e data/ironbounds_artefacts/tags/irons_spellbooks/spells/wish_blacklisted.json
