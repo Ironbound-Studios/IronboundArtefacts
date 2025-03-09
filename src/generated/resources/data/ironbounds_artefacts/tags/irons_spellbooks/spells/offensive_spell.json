@@ -1,5 +1,9 @@
 {
   "values": [
+    {
+      "id": "endersequipment:supernova",
+      "required": false
+    },
     "irons_spellbooks:acupuncture",
     "irons_spellbooks:ball_lightning",
     "irons_spellbooks:blaze_storm",
@@ -8,6 +12,7 @@
     "irons_spellbooks:blood_needles",
     "irons_spellbooks:chain_creeper",
     "irons_spellbooks:cone_of_cold",
+    "irons_spellbooks:fireball",
     "irons_spellbooks:fireball",
     "irons_spellbooks:fire_breath",
     "irons_spellbooks:firecracker",
@@ -40,6 +45,10 @@
     "irons_spellbooks:summon_vex",
     "irons_spellbooks:eldritch_blast",
     "irons_spellbooks:sonic_boom",
-    "irons_spellbooks:sculk_tentacles"
+    "irons_spellbooks:sculk_tentacles",
+    {
+      "id": "discerning_the_eldritch:esoteric_edge",
+      "required": false
+    }
   ]
 }
