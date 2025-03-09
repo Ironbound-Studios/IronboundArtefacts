@@ -58,6 +58,8 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     private Player player = null;
     private LivingEntity helpTarget;
 
+
+
     /**
      * The owner can NEVER be something other than a player.
      * The simulacrum is meant to be a player-only spell due to how it "gathers" spells.
@@ -375,7 +377,6 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isHostileTowards));
         this.targetSelector.addGoal(5, (new GenericHurtByTargetGoal(this, (entity) -> entity == getSummoner())).setAlertOthers());
         this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal<>(this, false));
-
 
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(3, new PatrolNearLocationGoal(this, 30, .75f));
