@@ -141,6 +141,7 @@ dependencies {
     // ISS *****************************************************************************************************
     //implementation("io.redspace:irons_spellbooks:${irons_spells_version}")
     implementation "curse.maven:irons-spells-n-spellbooks-855414:6117735"
+    //implementation "curse.maven:pvp-flagging-967706:5784138"
     // IB CORE DEPS
     //implementation("com.github.IGN-Styly:Arcanus:1.21.1-0.3.6.1a")
 //    implementation "curse.maven:entity-tickrate-api-969702:5897726"

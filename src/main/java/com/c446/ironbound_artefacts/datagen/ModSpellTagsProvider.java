@@ -73,6 +73,7 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
         ;
 
         tag(Tags.SpellTags.OFFENSIVE_SPELL)
+                .add(k("endersequipment:supernova"))
 //                .add(getKey(SpellRegistry.ACID_ORB_SPELL.get()))
                 .add(k(ACUPUNCTURE_SPELL.get()))
                 .add(k(BALL_LIGHTNING_SPELL.get()))
