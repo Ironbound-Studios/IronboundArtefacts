@@ -1,0 +1,16 @@
+{
+  "values": [
+    "#c:bosses",
+    {
+      "id": "ironbounds_artefacts:archmage",
+      "required": false
+    },
+    "irons_spellbooks:pyromancer",
+    "irons_spellbooks:cultist",
+    "irons_spellbooks:cryomancer",
+    "irons_spellbooks:necromancer",
+    "irons_spellbooks:dead_king_corpse",
+    "irons_spellbooks:apothecarist",
+    "irons_spellbooks:archevoker"
+  ]
+}

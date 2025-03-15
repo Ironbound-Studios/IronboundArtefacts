@@ -25,7 +25,6 @@ public class ModSetup {
     }
 
     public static void register(IEventBus eventBus) {
-
         ItemRegistry.ITEMS.register(eventBus);
         AttributeRegistry.ATTRIBUTES.register(eventBus);
         EffectsRegistry.EFFECTS.register(eventBus);

@@ -1,5 +1,6 @@
 package com.c446.ironbound_artefacts.attachment;
 
+import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.common.util.INBTSerializable;

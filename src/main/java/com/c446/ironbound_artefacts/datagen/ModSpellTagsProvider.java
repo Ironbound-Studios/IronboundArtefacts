@@ -130,7 +130,5 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
                 .add(k(BLESSING_OF_LIFE_SPELL.get()))
                 .add(k(HEALING_CIRCLE_SPELL.get()))
                 .add(k(ABYSSAL_SHROUD_SPELL.get()));
-        tag(Tags.SpellTags.WISH_BANNED)
-                .add(k(TIME_STOP));
     }
 }

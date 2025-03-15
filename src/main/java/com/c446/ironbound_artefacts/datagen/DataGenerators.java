@@ -13,6 +13,8 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.concurrent.CompletableFuture;
 
+import static net.minecraft.core.registries.Registries.ENTITY_TYPE;
+
 @EventBusSubscriber(modid = IronboundArtefact.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
 
@@ -24,6 +26,7 @@ public class DataGenerators {
         CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
 
         gen.addProvider(event.includeServer(), new ModSpellTagsProvider(outPut, SpellRegistry.SPELL_REGISTRY_KEY, provider, existingFileHelper));
+        gen.addProvider(event.includeClient(), new ModEntityTags(outPut, ENTITY_TYPE, provider, existingFileHelper));
         var blockTags = new ModBlockTagProvider(outPut, provider, existingFileHelper);
         gen.addProvider(event.includeClient(), new ModModelsProvider(outPut, existingFileHelper));
         gen.addProvider(event.includeServer(), new ItemTagProvider(outPut, provider, existingFileHelper));

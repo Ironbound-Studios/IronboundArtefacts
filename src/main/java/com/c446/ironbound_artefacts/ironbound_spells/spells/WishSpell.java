@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -80,37 +81,44 @@ public class WishSpell extends AbstractSpell {
         stack.setCount(stack.getCount() - 1);
     }
 
-    public boolean applyItemEffect(ItemStack item, LivingEntity entity, int spellLevel, Level level, CastSource castSource) {
+    public boolean applyItemEffect(ItemStack item, LivingEntity entity, int spellLevel, Level level, CastSource castSource, InteractionHand hand) {
         ServerPlayer serverPlayer = entity instanceof ServerPlayer ? (ServerPlayer) entity : null;
         if (serverPlayer != null && item.is(ItemRegistry.ARCANE_ESSENCE.get())) {
-            return applyEffect(entity, EffectsRegistry.MANA_REGEN, spellLevel, item);
+            //return applyEffect(entity, EffectsRegistry.MANA_REGEN, spellLevel, item);
+            return false;
         } else if (item.is(Items.PHANTOM_MEMBRANE)) {
             return applyEffect(entity, MobEffects.SLOW_FALLING, spellLevel, item);
         } else if (item.is(Items.MAGMA_CREAM)) {
             return applyEffect(entity, MobEffects.FIRE_RESISTANCE, spellLevel, item);
         } else if (item.is(Items.GOLD_BLOCK)) {
-            return applyEffect(entity, MobEffects.DAMAGE_RESISTANCE, spellLevel, 4, item);
+            return applyEffect(entity, MobEffects.DAMAGE_RESISTANCE, spellLevel, 2, item);
         } else if (item.is(Items.GHAST_TEAR)) {
-            return applyEffect(entity, MobEffects.REGENERATION, spellLevel, item);
+            return applyEffect(entity, MobEffects.REGENERATION, spellLevel,2, item);
         } else if (item.has(ComponentRegistry.SPELL_CONTAINER)) {
             var ret = !handleSpellContainer(item, entity, serverPlayer, spellLevel, level, castSource);
             if (!ret && serverPlayer != null) {
                 serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("ui.irons_spellbooks.wish.fail.spell")));
             }
             return ret;
-        } else if (item.is(Items.ZOMBIE_HEAD) && item.getCount() > 3) {
+        } else if (item.is(Items.GOLDEN_APPLE) && entity instanceof ServerPlayer player && player.experienceLevel > 40){
+            item.setCount(item.getCount()-1);
+            player.addItem(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE,1));
+            player.experienceLevel-=20;
+            player.totalExperience= (int) (player.experienceLevel * .5d);
+        }
+
+        else if (item.is(Items.ZOMBIE_HEAD) && item.getCount() > 3) {
             return applySummonEffects(level, entity, spellLevel);
         } else if (item.is(Items.WITHER_SKELETON_SKULL)) {
-            return handleWitherSkull(level, entity);
+            //return handleWitherSkull(level, entity);
+            return false;
         } else if (item.is(Tags.ItemTags.WISH_DUPLICABLE)) {
             return handleWishDuplicable(item);
         } else if (item.is(Items.GLASS_BOTTLE) && item.has(DataComponents.POTION_CONTENTS)) {
-            return handleHeroFeast(item, level, spellLevel, entity);
-        } else {
-            if (serverPlayer != null)
-                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("ui.irons_spellbooks.wish.fail").withStyle(ChatFormatting.RED)));
+            //return handleHeroFeast(item, level, spellLevel, entity);
             return false;
         }
+        return false;
     }
 
     private boolean applyEffect(LivingEntity entity, Holder<MobEffect> effect, int spellLevel, ItemStack item) {
@@ -148,6 +156,7 @@ public class WishSpell extends AbstractSpell {
                 if (selectedSpell != null && selectedSpell.getSpell() != null && !Objects.equals(selectedSpell.getSpell().getSpellId(), this.getSpellId())) {
                     if (SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).isPresent() && SpellRegistry.REGISTRY.getHolder(selectedSpell.getSpell().getSpellResource()).get().is(Tags.SpellTags.WISH_UNCASTABLE)) {
                         serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("spell.ironbounds_artefacts.wish.invalid_spell").withStyle(ChatFormatting.RED)));
+                        return false;
                     }
 
                     int spellLevel1 = selectedSpell.getLevel() + spellLevel;
@@ -179,11 +188,11 @@ public class WishSpell extends AbstractSpell {
     }
 
     private boolean handleWitherSkull(Level level, LivingEntity entity) {
-        var result = Utils.raycastForEntity(level, entity, 150, true);
-        if (result instanceof EntityHitResult result1 && result1.getEntity() instanceof LivingEntity l) {
-            l.hurt(l.damageSources().wither(), l.getMaxHealth() * 2);
-            return true;
-        }
+//        var result = Utils.raycastForEntity(level, entity, 150, true);
+//        if (result instanceof EntityHitResult result1 && result1.getEntity() instanceof LivingEntity l) {
+//            l.hurt(l.damageSources().wither(), l.getMaxHealth()*1.4f);
+//            return true;
+//        }
         return false;
     }
 
@@ -200,8 +209,18 @@ public class WishSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        applyItemEffect(entity.getOffhandItem(), entity, spellLevel, level, castSource);
-        applyItemEffect(entity.getMainHandItem(), entity, spellLevel, level, castSource);
+        boolean off = false;
+        boolean main = false;
+        if (applyItemEffect(entity.getOffhandItem(), entity, spellLevel, level, castSource, InteractionHand.OFF_HAND)){
+            off = true;
+        } else if (applyItemEffect(entity.getMainHandItem(), entity, spellLevel, level, castSource, InteractionHand.MAIN_HAND)){
+            main=true;
+        }
+
+        if (!main && !off && entity instanceof ServerPlayer player){
+                player.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("ui.irons_spellbooks.wish.fail").withStyle(ChatFormatting.RED)));
+        }
+
         entity.addEffect(new MobEffectInstance(EffectsRegistry.VOID_POISON, 100, 4));
 
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);

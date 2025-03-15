@@ -16,7 +16,7 @@ public class IBEntitiesReg {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, MODID);
     public static final DeferredHolder<EntityType<?>, EntityType<SimulacrumEntity>> SIMULACRUM = registerEntity(
             "simulacrum",
-            EntityType.Builder.<SimulacrumEntity>of(SimulacrumEntity::new, MobCategory.MISC)
+            EntityType.Builder.<SimulacrumEntity>of(SimulacrumEntity::new, MobCategory.MONSTER)
                     .sized(0.6f, 1.8f)
                     .setTrackingRange(30)
                     .noSave().noSummon().eyeHeight(1.75F)
