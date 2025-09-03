@@ -7,12 +7,30 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.neoforged.neoforge.common.EffectCure;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 public class IronboundMobEffect extends MobEffect {
+    public static class IgnoreAntimagic extends IronboundMobEffect {
 
+        public IgnoreAntimagic(MobEffectCategory category, int color) {
+            super(category, color);
+        }
+
+        protected IgnoreAntimagic(MobEffectCategory category, int color, ParticleOptions particle) {
+            super(category, color, particle);
+        }
+
+        @Override
+        public void fillEffectCures(@NotNull Set<EffectCure> cures, @NotNull MobEffectInstance effectInstance) {
+        }
+    }
 
     public IronboundMobEffect(net.minecraft.world.effect.MobEffectCategory category, int color) {
         super(category, color);

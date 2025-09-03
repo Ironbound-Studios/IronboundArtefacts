@@ -29,6 +29,4 @@ public class EternalLotus extends Item {
         pStack.setCount(pStack.getCount()-1);
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }
-
-
 }

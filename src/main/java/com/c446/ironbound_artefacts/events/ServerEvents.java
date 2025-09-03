@@ -8,30 +8,35 @@ import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.enthrall.DominatedEffectInstance;
 import com.c446.ironbound_artefacts.items.impl.lore_items.Phylactery;
 import com.c446.ironbound_artefacts.registries.AttachmentRegistry;
+import com.c446.ironbound_artefacts.registries.DamageSourcesReg;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.HashMultimap;
 import io.redspace.ironsspellbooks.api.events.*;
+import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
+import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.damage.DamageSources;
-import io.redspace.ironsspellbooks.damage.SpellDamageSource;
+import io.redspace.ironsspellbooks.damage.ISSDamageTypes;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
 import io.redspace.ironsspellbooks.registries.EntityRegistry;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -50,7 +55,6 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 
@@ -58,9 +62,13 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.c446.ironbound_artefacts.IronboundArtefact.ContributorUUIDS.*;
+import static com.c446.ironbound_artefacts.IronboundArtefact.LOGGER;
+import static com.c446.ironbound_artefacts.registries.AttributeRegistry.IMMORTAL_ART_POWER;
 import static com.c446.ironbound_artefacts.registries.ComponentRegistry.KILL_COUNT_COMPONENT;
 import static com.c446.ironbound_artefacts.registries.EffectsRegistry.ENTHRALLED;
+import static com.c446.ironbound_artefacts.registries.EffectsRegistry.HEAVENLY_DESCENT;
 import static com.c446.ironbound_artefacts.registries.ItemRegistry.*;
+import static io.redspace.ironsspellbooks.damage.DamageSources.getHolderFromResource;
 
 @EventBusSubscriber
 public class ServerEvents {
@@ -155,7 +163,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void PhylacteryHandler(LivingDeathEvent event) {
-        if (event.getEntity() instanceof Player player) {
+                if (event.getEntity() instanceof Player player) {
             CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
                 var phylacteries = inv.findFirstCurio(stack -> stack.getItem() instanceof Phylactery);
                 if (player instanceof ServerPlayer serverPlayer && phylacteries.isPresent() && phylacteries.get().stack().has(KILL_COUNT_COMPONENT)) {
@@ -184,22 +192,128 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onSummonDamage(LivingDamageEvent.Pre event) {
-        if (event.getEntity() instanceof IMagicSummon summon && summon.getSummoner() != null) {
+        if (event.getEntity() instanceof IMagicSummon summon && summon.getSummoner() instanceof LivingEntity l) {
             event.setNewDamage(
-                    (float) (event.getOriginalDamage() * summon.getSummoner().getAttributeValue(AttributeRegistry.SUMMON_DAMAGE)
+                    (float) (event.getOriginalDamage() * l.getAttributeValue(AttributeRegistry.SUMMON_DAMAGE)
                     )
             );
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public static void onDamage(LivingDamageEvent.Pre event) {
+        if (event.getSource().is(SchoolRegistry.LIGHTNING.get().getDamageType())) {
+
+            if (event.getSource().getEntity() instanceof LivingEntity caster
+                    && caster.level() instanceof ServerLevel level) {
+
+                // Check for Lightning Voice effect and lightning damage type
+                if (caster.hasEffect(EffectsRegistry.LIGHTNING_VOICE)
+                        && event.getSource().is(ISSDamageTypes.LIGHTNING_MAGIC)) {
+
+                    MobEffectInstance currentAftershock = event.getEntity().getEffect(EffectsRegistry.AFTERSHOCK);
+                    int newAmplifier = currentAftershock == null ? 0 : currentAftershock.getAmplifier() + 1;
+                    event.getEntity().addEffect(new MobEffectInstance(
+                            EffectsRegistry.AFTERSHOCK,
+                            MobEffectInstance.INFINITE_DURATION,
+                            newAmplifier
+                    ));
+                }
+
+                MobEffectInstance aftershock = event.getEntity().getEffect(EffectsRegistry.AFTERSHOCK);
+                if (aftershock == null) return;
+
+                int amplifier = aftershock.getAmplifier();
+
+                // Check for every 3rd stack
+                if ((amplifier + 1) % 3 == 0 && event.getEntity() instanceof LivingEntity spellTarget) {
+                    //event.getEntity().removeEffect(EffectsRegistry.AFTERSHOCK);
+
+                    // Create visual lightning bolt
+                    LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(level);
+                    assert lightningBolt != null;
+                    lightningBolt.setVisualOnly(true);
+                    lightningBolt.setDamage(0);
+                    lightningBolt.setPos(spellTarget.position());
+                    level.addFreshEntity(lightningBolt);
+
+                    // Calculate area effect
+                    float radius = 4;
+                    float damage = (float) (15 * caster.getAttributeValue(AttributeRegistry.LIGHTNING_SPELL_POWER)
+                            * caster.getAttributeValue(AttributeRegistry.SPELL_POWER)
+                            * caster.getAttributeValue(IMMORTAL_ART_POWER));
+
+                    Vec3 finalPos = spellTarget.position();
+                    AABB area = AABB.ofSize(finalPos, radius * 2, radius * 2, radius * 2);
+
+                    level.getEntities(caster, area, target ->
+                            target instanceof LivingEntity tar && caster.canAttack(tar)
+                    ).forEach(target -> {
+                        double distance = target.distanceToSqr(finalPos);
+                        if (distance < radius * radius &&
+                                Utils.hasLineOfSight(level, finalPos.add(0, 2, 0), target.getBoundingBox().getCenter(), true)) {
+
+                            target.invulnerableTime = 0;
+                            float finalDamage = (float) (damage * (1 - distance / (radius * radius)));
+                            DamageSource source = new DamageSource(
+                                    getHolderFromResource(caster, DamageSourcesReg.IMMORTAL_ART),
+                                    lightningBolt,
+                                    caster
+                            );
+
+                            DamageSources.applyDamage(target, finalDamage, source);
+
+                            if (target instanceof Creeper creeper) {
+                                creeper.thunderHit(level, lightningBolt);
+                            }
+                        }
+                    });
+                }
+
+                // Check for max stacks
+                if (amplifier >= 24) {
+                    System.out.println("max stacks reached.");
+                    caster.addEffect(new MobEffectInstance(
+                            HEAVENLY_DESCENT,
+                            1,
+                            15 * 20
+                    ));
+                    event.getEntity().removeEffect(EffectsRegistry.AFTERSHOCK);
+                    event.getEntity().addEffect(new MobEffectInstance(EffectsRegistry.LIGHTNING_SHREDDED, 20 * 15));
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void spellManaEvent(SpellOnCastEvent e) {
+        if (e.getEntity().hasEffect(HEAVENLY_DESCENT) /*&& e.getSchoolType().equals(SchoolRegistry.LIGHTNING)*/) {
+            LOGGER.debug("reducing mana cost");
+            e.setManaCost((int) (e.getManaCost() * 0.5F));
+
+            var pmd = MagicData.getPlayerMagicData(e.getEntity());
+            var cd = pmd.getPlayerCooldowns().getSpellCooldowns().get(e.getSpellId());
+            if (cd != null) {
+                cd.decrementBy(cd.getSpellCooldown() / 2);
+                LOGGER.debug("reducing cooldown by half (or trying...)");
+            } else{
+                LOGGER.debug("cd was null !");
+                var s = SpellRegistry.getSpell(e.getSpellId());
+                pmd.getPlayerCooldowns().addCooldown(e.getSpellId(), s.getSpellCooldown()/2);
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onSummonSpellDamage(SpellDamageEvent event) {
-        if (event.getEntity() instanceof IMagicSummon summon && summon.getSummoner() != null) {
+        if (event.getEntity() instanceof IMagicSummon summon && summon.getSummoner() instanceof LivingEntity l) {
             event.setAmount(
-                    (float) (event.getAmount() * summon.getSummoner().getAttributeValue(AttributeRegistry.SUMMON_DAMAGE)
+                    (float) (event.getAmount() * l.getAttributeValue(AttributeRegistry.SUMMON_DAMAGE)
                     )
             );
         }
+        if (event.getSpellDamageSource().getEntity() instanceof LivingEntity c && c.hasEffect(EffectsRegistry.LIGHTNING_VOICE) && event.getSpellDamageSource().is(ISSDamageTypes.LIGHTNING_MAGIC))
+            c.heal(event.getOriginalAmount() * 0.1F);
     }
 
     @SubscribeEvent
@@ -207,8 +321,8 @@ public class ServerEvents {
         var victim = event.getEntity();
         var attacker = event.getSource().getEntity();
         boolean pvp = victim instanceof ServerPlayer && attacker instanceof SimulacrumEntity;
-        if(pvp){
-            DamageSources.applyDamage(victim,event.getOriginalDamage(), DamageSources.get(victim.level(),DamageTypes.MAGIC));
+        if (pvp) {
+            DamageSources.applyDamage(victim, event.getOriginalDamage(), DamageSources.get(victim.level(), DamageTypes.MAGIC));
             event.setNewDamage(0);
 
         }
@@ -254,26 +368,6 @@ public class ServerEvents {
         }
     }
 
-    /*@SubscribeEvent
-    public static void onEntityDamaged(LivingDamageEvent.Pre event) {
-        CuriosApi.getCuriosInventory(event.getEntity().getLastAttacker()).ifPresent(inv -> {
-            List<SlotResult> result = inv.findCurios(DEATH_AMULET.get());
-            if (!result.isEmpty()) {
-                event.getEntity().addEffect(new MobEffectInstance(EffectsRegistry.VOID_POISON, 3, 1));
-            }
-        });
-        if (event.getSource().getEntity() instanceof Player player) {
-            System.out.println("attacker is player");
-            CuriosApi.getCuriosInventory(player).ifPresent(i -> {
-                System.out.println("attacker has curios inv");
-                if (i.isEquipped(ItemRegistry.STOPWATCH.get()) && STOPWATCH.value().canEntityUseItem(player)) {
-                    System.out.println("attacker has stopwatch");
-                    event.getEntity().invulnerableTime = 5;
-                }
-            });
-            //event.getEntity().invulnerableTime = Config.iframeCount;
-        }
-    }*/
     @SubscribeEvent
     public static void levelTick(ServerTickEvent.Pre event) {
         IronboundArtefact.tickMap();
@@ -287,37 +381,30 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onServerStop(ServerStartedEvent event) {
-        event.getServer().getAllLevels().forEach(level -> {
-            level.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(SimulacrumEntity::discard);
-        });
-    }
-
-    @SubscribeEvent
     public static void onManaRegen(ChangeManaEvent event) {
         if (event.getEntity().hasEffect(EffectsRegistry.TIME_STOP)) {
-            event.setCanceled(true);
+            //event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public static void onThrowItem(ItemTossEvent event) {
         if (event.getPlayer().hasEffect(EffectsRegistry.TIME_STOP)) {
-            event.setCanceled(true);
+            //event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public static void onItemUse(PlayerInteractEvent.RightClickItem event) {
         if (event.getEntity().hasEffect(EffectsRegistry.TIME_STOP)) {
-            event.setCanceled(true);
+            //event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public static void onItemUseLeftClick(PlayerInteractEvent.LeftClickBlock event) {
         if (event.getEntity().hasEffect(EffectsRegistry.TIME_STOP)) {
-            event.setCanceled(true);
+            //event.setCanceled(true);
         }
     }
 

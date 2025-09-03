@@ -21,13 +21,12 @@ import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 
 @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
-
     @SubscribeEvent
     public static void renderRegisters(EntityRenderersEvent.RegisterRenderers event) {
         ItemRegistry.ITEMS.getEntries().stream().filter(item -> item.get() instanceof SpellBook).forEach((item) -> CuriosRendererRegistry.register(item.get(), SpellBookCurioRenderer::new));
         event.registerEntityRenderer(IBEntitiesReg.SIMULACRUM.get(), SimulacrumRenderer::new);
         event.registerEntityRenderer(IBEntitiesReg.ARCHMAGE.get(), (EntityRendererProvider.Context renderManager) -> new ArchmageRenderer(renderManager, new ArchmageModel()));
-        event.registerEntityRenderer(IBEntitiesReg.FORCE_WALL.get(), NoopRenderer::new);
+        event.registerEntityRenderer(IBEntitiesReg.CORPSE_MOUNTAIN.get(), NoopRenderer::new);
     }
 
     @SubscribeEvent

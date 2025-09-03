@@ -1,6 +1,5 @@
 package com.c446.ironbound_artefacts.items.impl.lore_items;
 
-import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.components.KillCounterComponent;
 import com.c446.ironbound_artefacts.registries.ComponentRegistry;
 import com.google.common.collect.Multimap;
@@ -25,9 +24,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.redspace.ironsspellbooks.registries.ComponentRegistry.SPELL_CONTAINER;
 
@@ -46,15 +47,11 @@ public class Phylactery extends CurioBaseItem {
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         var map = super.getAttributeModifiers(slotContext, id, stack);
         if (slotContext.entity() != null) {
-            if (slotContext.entity().getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON)) {
-                map.put(AttributeRegistry.MANA_REGEN, new AttributeModifier(id, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-            } else {
-                map.put(AttributeRegistry.BLOOD_SPELL_POWER, new AttributeModifier(id, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-            }
+            map.put(AttributeRegistry.MANA_REGEN, new AttributeModifier(id, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+
         }
         return map;
     }
-
 
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
@@ -78,6 +75,18 @@ public class Phylactery extends CurioBaseItem {
 
     }
 
+    @Override
+    public boolean canEquip(SlotContext slotContext, ItemStack stack) {
+        if (slotContext.entity() != null && slotContext.entity() instanceof Player p){
+            AtomicBoolean ret = new AtomicBoolean(false);
+            CuriosApi.getCuriosInventory(p).ifPresent(inv->{
+                ret.set(inv.findFirstCurio(item -> item.getItem() instanceof Phylactery).isPresent());
+
+            });
+        }
+
+        return super.canEquip(slotContext, stack);
+    }
 
     @Override
     public void appendHoverText(ItemStack pStack, @NotNull TooltipContext pContext, @NotNull List<Component> pTooltipComponents, @NotNull TooltipFlag pTooltipFlag) {

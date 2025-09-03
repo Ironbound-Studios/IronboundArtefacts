@@ -30,6 +30,7 @@ public class ModModelsProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+
         basicItem(ItemRegistry.PROTECTION_RING.get());
         basicItem(ItemRegistry.MAGIC_DEFENSE_RING.get());
         basicItem(ItemRegistry.ELVEN_CHAINS.get());

@@ -39,7 +39,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, StaffOfPower> STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER))));
     public static final DeferredHolder<Item, StaffItem> STAFF_OF_SUN = ITEMS.register("sun_staff", () -> new StaffItem(ItemPropertiesHelper.equipment(1).rarity(Rarity.COMMON).attributes(ExtendedSwordItem.createAttributes(TIER_SUN_STAFF))));
     //public static final DeferredHolder<Item, StaffOfMagi> STAFF_OF_MAGI = ITEMS.register("staff_of_magi", () -> new StaffOfMagi(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_MAGI))));
-
+//    public static final DeferredHolder<Item, FourBlessing> FOUR_AXIS = ITEMS.register("four_axis", ()-> new FourBlessing(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC)));
 
     // HEADWEARS
     public static final DeferredHolder<Item, FlowerCrown> FC = ITEMS.register("flower_crown", () -> new FlowerCrown(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));

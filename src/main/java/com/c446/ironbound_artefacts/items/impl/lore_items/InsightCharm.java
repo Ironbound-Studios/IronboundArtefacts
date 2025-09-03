@@ -4,6 +4,11 @@ import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import com.c446.ironbound_artefacts.registries.AttributeRegistry;
 import com.google.common.collect.Multimap;
+import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.api.spells.SpellData;
+import io.redspace.ironsspellbooks.api.spells.SpellSlot;
+import io.redspace.ironsspellbooks.capabilities.magic.SpellContainer;
+import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -53,5 +58,12 @@ public class InsightCharm extends UserDependantCurios {
         var map = super.getAttributeModifiers(slotContext, id, stack);
         map.put(AttributeRegistry.INSIGHT, new AttributeModifier(IronboundArtefact.prefix("insight_charm"), 3, AttributeModifier.Operation.ADD_VALUE));
         return map;
+    }
+
+    @Override
+    public void initializeSpellContainer(ItemStack itemStack) {
+        itemStack.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(1,true,false, false, new SpellSlot[]{
+                SpellSlot.of(new SpellData(SpellRegistry.PLANAR_SIGHT_SPELL.get(), 5, true),0)
+        }));
     }
 }

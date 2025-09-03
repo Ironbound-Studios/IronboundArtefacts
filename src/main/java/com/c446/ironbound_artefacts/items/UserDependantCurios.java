@@ -1,13 +1,26 @@
 package com.c446.ironbound_artefacts.items;
 
+import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
+import io.redspace.ironsspellbooks.api.spells.IPresetSpellContainer;
+import io.redspace.ironsspellbooks.util.TooltipsUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
+import java.util.List;
 import java.util.UUID;
 
-public abstract class UserDependantCurios extends BaseItem implements ICurioItem {
+public abstract class UserDependantCurios extends BaseItem implements ICurioItem, IPresetSpellContainer {
     // not here, let's move up one class
     public UUID user;
+
+    public static void handleAffinityLines(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag){
+
+    }
 
     public UserDependantCurios(Properties p) {
         super(p);

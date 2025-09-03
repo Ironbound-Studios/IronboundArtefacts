@@ -27,6 +27,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
+import java.util.Map;
 
 public class MagicianMonocle extends UserDependantCurios {
     public MagicianMonocle(Properties p) {
@@ -47,7 +48,7 @@ public class MagicianMonocle extends UserDependantCurios {
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
-        double multiplier = 1;
+        int multiplier = 1;
         if (canEntityUseItem(slotContext.entity())) {
             multiplier = 2;
         }
@@ -61,40 +62,24 @@ public class MagicianMonocle extends UserDependantCurios {
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> lines, @NotNull TooltipFlag tooltipFlag) {
         lines.add(Component.translatable("item.ironbounds_artefacts.magicians_monocle.tooltip1"));
         lines.add(Component.translatable("item.ironbounds_artefacts.magicians_monocle.tooltip2").withStyle(ChatFormatting.ITALIC));
-        var affinity = AffinityData.getAffinityData(stack);
-        var spell = affinity.getSpell();
-        if (!spell.equals(SpellRegistry.none())) {
-            lines.add(Component.empty());
-            lines.add(Component.translatable("curios.modifiers.head").withStyle(ChatFormatting.GOLD));
-            var name = spell.getDisplayName(MinecraftInstanceHelper.instance.player()).withStyle(spell.getSchoolType().getDisplayName().getStyle());
-            lines.add(Component.literal(" ").append(
-                    (affinity.bonus() == 1 ? Component.translatable("tooltip.irons_spellbooks.enhance_spell_level", name) : Component.translatable("tooltip.irons_spellbooks.enhance_spell_level_plural", affinity.bonus(), name))
-                            .withStyle(ChatFormatting.YELLOW)));
-        }
+        handleAffinityLines(stack, context, lines, tooltipFlag);
         super.appendHoverText(stack, context, lines, tooltipFlag);
-    }
-
-    @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        if (canEntityUseItem(slotContext.entity())) {
-            var copy = stack.copy();
-            copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false, new SpellSlot[]{
-                            new SpellSlot(new SpellData(SpellRegistry.OAKSKIN_SPELL.get(), 10, true), 0),
-                            new SpellSlot(new SpellData(SpellRegistry.CHARGE_SPELL.get(), 5, true), 1),
-                            new SpellSlot(new SpellData(SpellRegistry.SCULK_TENTACLES_SPELL.get(), 6, true), 2),
-                            new SpellSlot(new SpellData(SpellRegistry.SONIC_BOOM_SPELL.get(), 5, true), 3)
-                    })
-            );
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        } else {
-            var copy = stack.copy();
-            copy.remove(ComponentRegistry.SPELL_CONTAINER);
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        }
     }
 
     @Override
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public void initializeSpellContainer(ItemStack itemStack) {
+        itemStack.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(3, true, false, false, new SpellSlot[]{
+                new SpellSlot(new SpellData(SpellRegistry.PLANAR_SIGHT_SPELL.get(), 3, true), 1),
+                new SpellSlot(new SpellData(SpellRegistry.POCKET_DIMENSION_SPELL.get(), 1, true), 2)
+        }));
+        itemStack.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(Map.of(
+                SpellRegistry.LIGHTNING_BOLT_SPELL.get().getSpellResource(), 2,
+                SpellRegistry.CHARGE_SPELL.get().getSpellResource(), 2)));
+
     }
 }

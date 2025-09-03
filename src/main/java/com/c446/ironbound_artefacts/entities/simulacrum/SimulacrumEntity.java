@@ -172,7 +172,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             this.player = player;
             var inv = CuriosApi.getCuriosInventory(this);
             if (inv.isPresent()) {
-                LOGGER.debug("Curios inv is present.");
+                //LOGGER.debug("Curios inv is present.");
             }
             if (player.level().isClientSide) {
                 this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getUUID());
@@ -237,7 +237,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }
 
     public ArrayList<AbstractSpell> simpleGetSpells(Player player) {
-        System.out.println("getting spells spells");
+        //System.out.println("getting spells spells");
         var spells = this.getspelllist(player);
         ArrayList<AbstractSpell> listSpells = new ArrayList<>();
         spells.forEach(a -> {

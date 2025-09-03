@@ -27,8 +27,6 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import java.util.List;
 
 public class HermitEye extends UserDependantCurios {
-
-
     public HermitEye(Properties p) {
         super(p);
     }
@@ -45,24 +43,6 @@ public class HermitEye extends UserDependantCurios {
         var affinity = AffinityData.getAffinityData(stack);
 
         super.appendHoverText(stack, context, lines, tooltipFlag);
-    }
-
-    @Override
-    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
-        if (canEntityUseItem(slotContext.entity())) {
-            var copy = stack.copy();
-            copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(2, true, false, false, new SpellSlot[]{
-                            new SpellSlot(new SpellData(SpellRegistry.TELEKINESIS_SPELL.get(), 10, true), 0),
-                            new SpellSlot(new SpellData(SpellRegistry.TELEPORT_SPELL.get(), 10, true), 1)
-                    })
-            );
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        } else {
-            var copy = stack.copy();
-            copy.remove(ComponentRegistry.SPELL_CONTAINER);
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        }
-        super.onEquip(slotContext, prevStack, stack);
     }
 
     @Override
@@ -84,5 +64,14 @@ public class HermitEye extends UserDependantCurios {
             attributeMap.put(AttributeRegistry.MANA_REGEN, new AttributeModifier(id, 0.125 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
         return attributeMap;
+    }
+
+    @Override
+    public void initializeSpellContainer(ItemStack itemStack) {
+        itemStack.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(2, true, false, false, new SpellSlot[]{
+                        new SpellSlot(new SpellData(SpellRegistry.TELEKINESIS_SPELL.get(), 10, true), 0),
+                        new SpellSlot(new SpellData(SpellRegistry.TELEPORT_SPELL.get(), 10, true), 1)
+                })
+        );
     }
 }

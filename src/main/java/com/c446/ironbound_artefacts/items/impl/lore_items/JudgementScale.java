@@ -5,6 +5,7 @@ import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.api.spells.IPresetSpellContainer;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.MinecraftInstanceHelper;
 import net.minecraft.ChatFormatting;
@@ -23,8 +24,9 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
+import java.util.Map;
 
-public class JudgementScale extends UserDependantCurios {
+public class JudgementScale extends UserDependantCurios implements IPresetSpellContainer {
 
     public JudgementScale(Properties p) {
         super(p);
@@ -47,32 +49,7 @@ public class JudgementScale extends UserDependantCurios {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
         lines.add(Component.translatable("item.ironbounds_artefacts.judgement_scale.tooltip1"));
         lines.add(Component.translatable("item.ironbounds_artefacts.judgement_scale.tooltip2").withStyle(ChatFormatting.ITALIC));
-        var affinity = AffinityData.getAffinityData(stack);
-        var spell = affinity.getSpell();
-        if (!spell.equals(SpellRegistry.none())) {
-            lines.add(Component.empty());
-            lines.add(Component.translatable("curios.modifiers.hands").withStyle(ChatFormatting.GOLD));
-            var name = spell.getDisplayName(MinecraftInstanceHelper.instance.player()).withStyle(spell.getSchoolType().getDisplayName().getStyle());
-            lines.add(Component.literal(" ").append(
-                    (affinity.bonus() == 1 ? Component.translatable("tooltip.irons_spellbooks.enhance_spell_level", name) : Component.translatable("tooltip.irons_spellbooks.enhance_spell_level_plural", affinity.bonus(), name))
-                            .withStyle(ChatFormatting.YELLOW)));
-        }
-        super.appendHoverText(stack, context, lines, tooltipFlag);
-    }
-
-    @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        if (canEntityUseItem(slotContext.entity())) {
-            if (AffinityData.getAffinityData(stack).getSpell().getSpellId() == SpellRegistry.RAISE_DEAD_SPELL.get().getSpellId() && AffinityData.getAffinityData(stack).bonus() > 0) {
-            }
-            var copy = stack.copy();
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.RAISE_DEAD_SPELL.get().getSpellId(), 3));
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        } else {
-            var copy = stack.copy();
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.none().getSpellId(), 0));
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        }
+        handleAffinityLines(stack, context, lines, tooltipFlag);
     }
 
     @Override
@@ -85,5 +62,12 @@ public class JudgementScale extends UserDependantCurios {
         modifiers.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("judgement_scale"), 0.125 * (multiplier + 1), AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         modifiers.put(Attributes.ARMOR, new AttributeModifier(IronboundArtefact.prefix("judgement_scale"), -0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         return modifiers;
+    }
+
+    @Override
+    public void initializeSpellContainer(ItemStack itemStack) {
+        itemStack.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(Map.of(
+                SpellRegistry.SUNBEAM_SPELL.get().getSpellResource(), 1,
+                SpellRegistry.FORTIFY_SPELL.get().getSpellResource(), 1)));
     }
 }

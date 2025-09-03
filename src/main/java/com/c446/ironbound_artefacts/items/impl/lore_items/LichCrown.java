@@ -7,9 +7,11 @@ import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.api.spells.IPresetSpellContainer;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.MinecraftInstanceHelper;
+import io.redspace.ironsspellbooks.util.TooltipsUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -23,16 +25,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.minecraft.tags.EntityTypeTags.UNDEAD;
 
-public class LichCrown extends UserDependantCurios {
+public class LichCrown extends UserDependantCurios implements IPresetSpellContainer {
     public LichCrown(Properties p) {
         super(p);
         NeoForge.EVENT_BUS.addListener(LichCrown::doLichCrownStuff);
@@ -70,36 +74,24 @@ public class LichCrown extends UserDependantCurios {
         return attributeModifier;
     }
 
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
-        lines.add(Component.translatable("item.ironbounds_artefacts.emperor_crown.tooltip1"));
-        lines.add(Component.translatable("item.ironbounds_artefacts.emperor_crown.tooltip2").withStyle(ChatFormatting.ITALIC));
-        var affinity = AffinityData.getAffinityData(stack);
-        var spell = affinity.getSpell();
-        if (!spell.equals(SpellRegistry.none())) {
-            lines.add(Component.empty());
-            lines.add(Component.translatable("curios.modifiers.head").withStyle(ChatFormatting.GOLD));
-            var name = spell.getDisplayName(MinecraftInstanceHelper.instance.player()).withStyle(spell.getSchoolType().getDisplayName().getStyle());
-            lines.add(Component.literal(" ").append(
-                    (affinity.bonus() == 1 ? Component.translatable("tooltip.irons_spellbooks.enhance_spell_level", name) : Component.translatable("tooltip.irons_spellbooks.enhance_spell_level_plural", affinity.bonus(), name))
-                            .withStyle(ChatFormatting.YELLOW)));
-        }
-        super.appendHoverText(stack, context, lines, tooltipFlag);
-    }
-
-    @Override
-    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
-        var copy = stack.copy();
-        copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.RAISE_DEAD_SPELL.get().getSpellId(), 3));
-        stack = copy;
-
-        super.onEquip(slotContext, prevStack, stack);
-    }
-
     @Override
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
         return true;
     }
 
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, lines, tooltipFlag);
+        lines.add(Component.translatable("item.ironbounds_artefacts.emperor_crown.tooltip1"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.emperor_crown.tooltip2").withStyle(ChatFormatting.ITALIC));
+        handleAffinityLines(stack, context, lines, tooltipFlag);
+    }
+
+    @Override
+    public void initializeSpellContainer(ItemStack itemStack) {
+        itemStack.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(Map.of(
+                SpellRegistry.RAISE_DEAD_SPELL.get().getSpellResource(), 1,
+                SpellRegistry.HEARTSTOP_SPELL.get().getSpellResource(), 1
+        )));
+    }
 }

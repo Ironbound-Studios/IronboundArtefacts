@@ -1,12 +1,14 @@
 package com.c446.ironbound_artefacts.datagen;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.registries.EntityRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
@@ -37,11 +39,11 @@ public class Tags {
         public static TagKey<AbstractSpell> create(ResourceLocation name) {
             return new TagKey<AbstractSpell>(SpellRegistry.SPELL_REGISTRY_KEY, name);
         }
-
     }
 
     public static class ItemTags {
         public static TagKey<Item> STAFF_COPY = net.minecraft.tags.ItemTags.create(IronsSpellbooks.id("staff"));
         public static TagKey<Item> WISH_DUPLICABLE = net.minecraft.tags.ItemTags.create(IronboundArtefact.prefix("wish_duplicable"));
+        public static TagKey<Item> IMMORTAL_ART_FOCUS = net.minecraft.tags.ItemTags.create(IronboundArtefact.prefix("immortal_art_focus"));
     }
 }

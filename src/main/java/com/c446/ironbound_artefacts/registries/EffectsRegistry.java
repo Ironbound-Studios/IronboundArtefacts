@@ -31,6 +31,35 @@ public class EffectsRegistry {
     public static final DeferredHolder<MobEffect, MobEffect> MANA_REGEN = EFFECTS.register("mana_regen", () -> new IronboundMobEffect(MobEffectCategory.BENEFICIAL, rgbToInt(0, 0, 200)).addAttributeModifier(AttributeRegistry.MANA_REGEN, IronboundArtefact.prefix("mana_regen_effect"), 0.10, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
     public static final DeferredHolder<MobEffect, StoppingTimeEffect> TIME_STOP_CASTER = EFFECTS.register("stopping_time", () -> new StoppingTimeEffect(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)));
     public static final DeferredHolder<MobEffect, SummonTimer> SIMULACRUM_SUMMON = EFFECTS.register("summoned_simulacrum", () -> new SummonTimer(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)));
+
+
+    public static final DeferredHolder<MobEffect, IronboundMobEffect.IgnoreAntimagic> AFTERSHOCK = EFFECTS.register("aftershock", () -> new IronboundMobEffect.IgnoreAntimagic(MobEffectCategory.BENEFICIAL, rgbToInt(0, 160, 160)));
+    public static final DeferredHolder<MobEffect, IronboundMobEffect.IgnoreAntimagic> LIGHTNING_VOICE = EFFECTS.register("lightning_voice", () -> new IronboundMobEffect.IgnoreAntimagic(MobEffectCategory.BENEFICIAL, rgbToInt(0, 160, 160)));
+    public static final DeferredHolder<MobEffect, IronboundMobEffect.IgnoreAntimagic> HEAVENLY_DESCENT = EFFECTS.register("heavenly_descent", () -> new IronboundMobEffect.IgnoreAntimagic(MobEffectCategory.BENEFICIAL, rgbToInt(0, 160, 160)));
+    public static final DeferredHolder<MobEffect, IronboundMobEffect.IgnoreAntimagic> LIGHTNING_SHREDDED = EFFECTS.register("lightning_res_down",
+            () -> (IronboundMobEffect.IgnoreAntimagic) new IronboundMobEffect
+                    .IgnoreAntimagic(MobEffectCategory.BENEFICIAL, rgbToInt(0, 160, 160))
+                    .addAttributeModifier(AttributeRegistry.LIGHTNING_MAGIC_RESIST, IronboundArtefact.prefix("res_shredded_lightning"), -0.5d, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+
+
+    public static final DeferredHolder<MobEffect, IronboundMobEffect.IgnoreAntimagic> CORPSE_MOUNTAIN_BUFF = EFFECTS.register("corpse_mountain_buff",
+            () -> (IronboundMobEffect.IgnoreAntimagic) new IronboundMobEffect.IgnoreAntimagic(MobEffectCategory.BENEFICIAL, rgbToInt(80,20,20))
+                    .addAttributeModifier(AttributeRegistry.BLOOD_SPELL_POWER, IronboundArtefact.prefix("corpse_mountain_buff"), 0.025, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+                    .addAttributeModifier(AttributeRegistry.SUMMON_DAMAGE, IronboundArtefact.prefix("corpse_mountain_buff"), 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+    );
+    public static final DeferredHolder<MobEffect, IronboundMobEffect.IgnoreAntimagic> FIRE_HOLY_DEF_DOWN = EFFECTS.register("corpse_mountain_debuff",
+            () -> (IronboundMobEffect.IgnoreAntimagic) new IronboundMobEffect.IgnoreAntimagic(MobEffectCategory.BENEFICIAL, rgbToInt(80,20,20))
+                    .addAttributeModifier(AttributeRegistry.FIRE_MAGIC_RESIST, IronboundArtefact.prefix("corpse_mountain_debuff"), -0.3, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+                    .addAttributeModifier(AttributeRegistry.HOLY_MAGIC_RESIST, IronboundArtefact.prefix("corpse_mountain_debuff"), -0.3, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+    );
+
+    public static final DeferredHolder<MobEffect, IronboundMobEffect.IgnoreAntimagic> HP_DOWN = EFFECTS.register("corpse_mountain_hp_down",
+            () -> (IronboundMobEffect.IgnoreAntimagic) new IronboundMobEffect.IgnoreAntimagic(MobEffectCategory.BENEFICIAL, rgbToInt(80,20,20))
+                    .addAttributeModifier(Attributes.MAX_HEALTH, IronboundArtefact.prefix("corpse_mountain_hp_down"), -0.05, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+    );
+
+    public static final DeferredHolder<MobEffect, MobEffect> INSIDE_CORPSE_MOUNTAIN = EFFECTS.register("inside_the_corpse_mountain", () -> new IronboundMobEffect.IgnoreAntimagic(MobEffectCategory.BENEFICIAL, rgbToInt(80, 0, 0)));
+
     //public static final DeferredHolder<MobEffect, PlaneShiftEffect> PLANE_SHIFT = EFFECTS.register("plane_shifting",  () -> new PlaneShiftEffect(MobEffectCategory.NEUTRAL, rgbToInt(255,0,255)));
 
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(BuiltInRegistries.POTION, MODID);

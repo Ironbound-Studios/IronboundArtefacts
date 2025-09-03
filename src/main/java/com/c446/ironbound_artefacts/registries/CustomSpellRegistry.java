@@ -1,5 +1,6 @@
 package com.c446.ironbound_artefacts.registries;
 
+import com.c446.ironbound_artefacts.entities.force_cage.CorpseMountainSpell;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.*;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
@@ -18,8 +19,11 @@ public class CustomSpellRegistry {
     public static final Supplier<AbstractSpell> PLANE_SHIFT;
     public static final Supplier<AbstractSpell> SIMULACRUM;
     public static final Supplier<AbstractSpell> HYPNOTIC_PATTERN;
+    public static final Supplier<AbstractSpell> HEAVENLY_PUNISHMENT;
+    public static final Supplier<AbstractSpell> MOUNTAIN;
 
     static {
+        MOUNTAIN = registerSpell(new CorpseMountainSpell());
         TIME_STOP = registerSpell(new TimeStopSpell());
         WISH = registerSpell(new WishSpell());
         DIVINE_BOON = registerSpell(new DivineGiftSpell());
@@ -28,6 +32,8 @@ public class CustomSpellRegistry {
         //KERESHKA_FAVOR = registerSpell(new StaffOfMagi.KereshkaFavor());
         SIMULACRUM = registerSpell(new SimulacrumSpell());
         //FASLSE_LIFE = registerSpell(new FalseLifeSpell());
+        HEAVENLY_PUNISHMENT=registerSpell(new HeavenlyPunishment());
+
     }
 
     private static Supplier<AbstractSpell> registerSpell(AbstractSpell spell) {

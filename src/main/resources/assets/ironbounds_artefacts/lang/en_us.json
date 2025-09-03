@@ -97,5 +97,6 @@
   "ui.irons_spellbooks.wish.fail.spell": "Wish cannot cast this spell!",
   "ui.irons_spellbooks.wish.fail": "This item is not compatible with wish...",
   "entity.ironbounds_artefacts.simulacrum": "Simulacrum",
-  "entity.ironbounds_artefacts.archmage": "Archmage"
+  "entity.ironbounds_artefacts.archmage": "Archmage",
+  "school.irons_spellbooks.immortal_art": "Immortal Arts"
 }

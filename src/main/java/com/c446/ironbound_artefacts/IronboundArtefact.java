@@ -1,6 +1,11 @@
 package com.c446.ironbound_artefacts;
 
+import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import com.min01.tickrateapi.util.TickrateUtil;
+import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
+import io.redspace.ironsspellbooks.api.spells.SchoolType;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

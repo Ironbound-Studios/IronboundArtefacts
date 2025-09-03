@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts;
 
 import com.c446.ironbound_artefacts.registries.*;
+import com.c446.lines_and_particles_lib.network.ClientPayloadHandler;
 import io.redspace.ironsspellbooks.registries.CreativeTabRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,8 @@ public class ModSetup {
         ModSetup.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.addListener(this::setup);
+        modEventBus.addListener(ClientPayloadHandler::registerClient);
+//        io.redspace.ironsspellbooks.setup.PayloadHandler
     }
 
     public static void register(IEventBus eventBus) {
@@ -35,6 +38,8 @@ public class ModSetup {
         ComponentRegistry.register(eventBus);
         //ArmorMaterials.MATERIALS.register(eventBus);
         ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);
+        SchoolTypesRegistry.SCHOOLS.register(eventBus);
+
     }
 
     public static ResourceLocation prefix(String path) {

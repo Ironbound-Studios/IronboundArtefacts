@@ -47,4 +47,9 @@ public class FlowerCrown extends UserDependantCurios {
         map.put(AttributeRegistry.MANA_REGEN, new AttributeModifier(id, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return map;
     }
+
+    @Override
+    public void initializeSpellContainer(ItemStack itemStack) {
+
+    }
 }

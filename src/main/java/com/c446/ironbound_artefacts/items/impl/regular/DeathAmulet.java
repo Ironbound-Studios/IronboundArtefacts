@@ -4,15 +4,21 @@ import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import com.c446.ironbound_artefacts.registries.AttributeRegistry;
 import com.google.common.collect.Multimap;
+import dev.shadowsoffire.apothic_attributes.api.ALObjects;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
+
+import java.util.List;
 
 public class DeathAmulet extends UserDependantCurios {
     public DeathAmulet(Properties p) {
@@ -32,7 +38,25 @@ public class DeathAmulet extends UserDependantCurios {
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
         int multiplier = (canEntityUseItem(slotContext.entity())) ? 2 : 1;
 
+        var dat = stack.get(DataComponents.ATTRIBUTE_MODIFIERS);
+
+        if (dat != null) {
+            dat.modifiers().forEach(s-> {
+                attributeModifier.put(s.attribute(), s.modifier());
+            });
+        }
+
         attributeModifier.put(AttributeRegistry.VOID_DAMAGE_ATTRIBUTE, new AttributeModifier(id, multiplier, AttributeModifier.Operation.ADD_VALUE));
         return attributeModifier;
+    }
+
+    @Override
+    public void initializeSpellContainer(ItemStack itemStack) {
+        itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, new ItemAttributeModifiers(List.of(
+                new ItemAttributeModifiers.Entry(
+                        ALObjects.Attributes.ARMOR_PIERCE.getDelegate(),
+                        new AttributeModifier(IronboundArtefact.prefix("flower_base_hp"), 0.1, AttributeModifier.Operation.ADD_VALUE),
+                        EquipmentSlotGroup.ANY)
+        ), true));
     }
 }

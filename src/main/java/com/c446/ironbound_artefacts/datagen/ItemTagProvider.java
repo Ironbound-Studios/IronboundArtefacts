@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.datagen;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.registries.SchoolTypesRegistry;
 import io.redspace.ironsspellbooks.registries.ItemRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -33,6 +34,9 @@ public class ItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
         ;
         tag(HIDDEN_FROM_RECIPE_VIEWERS)
                 .add(com.c446.ironbound_artefacts.registries.ItemRegistry.DREAMS.get());
+
+        tag(Tags.ItemTags.IMMORTAL_ART_FOCUS)
+                .add(ItemRegistry.DIVINE_SOULSHARD.get());
 
         tag(ARMORS)
                 .add(ARCHMAGE_CHEST.get())

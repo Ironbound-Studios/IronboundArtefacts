@@ -49,8 +49,8 @@ public class HypnoticPattern extends AbstractSpell {
     }
 
     public HypnoticPattern() {
-        this.baseSpellPower = 40;
-        this.spellPowerPerLevel = 20;
+        this.baseSpellPower = 5;
+        this.spellPowerPerLevel = 1;
         this.baseManaCost = 300;
         this.manaCostPerLevel = 20;
         this.castTime = 20 * 10;
@@ -82,7 +82,7 @@ public class HypnoticPattern extends AbstractSpell {
     }
 
     public int getRadius(int spellLevel, LivingEntity entity){
-        return (entity != null) ? (int) (15 * (spellLevel+1) * getSpellPower(spellLevel, entity)) : (15 * (spellLevel+1));
+        return (entity != null) ? (int) ((spellLevel+1) * getSpellPower(spellLevel, entity)) : ((spellLevel+1));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class HypnoticPattern extends AbstractSpell {
 
         if (level instanceof ServerLevel serverLevel && playerMagicData.getAdditionalCastData() instanceof TargetedTargetAreaCastData targetAreaCastData && targetAreaCastData.getTarget(serverLevel) != null) {
             var targetEntity = targetAreaCastData.getTarget(serverLevel);
-            int rad = (int) (15 * spellLevel * getSpellPower(spellLevel, entity));
+            int rad = getRadius(spellLevel, entity);
             int targetMax = (int) (6 * getSpellPower(spellLevel, entity));
             AtomicInteger targetNumber = new AtomicInteger(0);
             targetEntity.level().getEntitiesOfClass(LivingEntity.class, targetEntity.getBoundingBox().inflate(rad)).forEach(tar -> {
