@@ -4,6 +4,7 @@ import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.attachment.FirstLoginData;
 import com.c446.ironbound_artefacts.attachment.IBSpellCasterData;
 import com.c446.ironbound_artefacts.attachment.SchoolAffinityComponent;
+import com.c446.ironbound_artefacts.attachment.WillStorage;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -21,5 +22,9 @@ public class AttachmentRegistry {
     );
     public static final Supplier<AttachmentType<SchoolAffinityComponent>> MARKOHESHKIR_ATTACHMENT = ATTACHMENT_TYPE_DEFERRED_REGISTER.register(
             "markoheshkir_attachment_ib_artefacts", () -> AttachmentType.serializable(SchoolAffinityComponent::new).build()
+    );
+
+    public static final Supplier<AttachmentType<WillStorage>> WILL = ATTACHMENT_TYPE_DEFERRED_REGISTER.register(
+            "will_storage_ib_artefacts", () -> AttachmentType.serializable(WillStorage::new).build()
     );
 }

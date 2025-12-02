@@ -30,8 +30,9 @@ public class DataGenerators {
         var blockTags = new ModBlockTagProvider(outPut, provider, existingFileHelper);
         gen.addProvider(event.includeClient(), new ModModelsProvider(outPut, existingFileHelper));
         gen.addProvider(event.includeServer(), new ItemTagProvider(outPut, provider, existingFileHelper));
+        gen.addProvider(event.includeServer(), new ModDamageTagTypesProvider(outPut, provider, existingFileHelper));
 
-//        gen.addProvider(
+        //        gen.addProvider(
 //                event.includeServer(),
 //                new WishDuplicableTagsProvider(out, provider, event., helper, "", helper)
 //        );

@@ -2,6 +2,7 @@ package com.c446.ironbound_artefacts.registries;
 
 import com.c446.ironbound_artefacts.entities.force_cage.CorpseMountainSpell;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.*;
+import com.c446.ironbound_artefacts.ironbound_spells.void_sword.Zero;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -13,6 +14,9 @@ import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 public class CustomSpellRegistry {
     public static final DeferredRegister<AbstractSpell> SPELLS = DeferredRegister.create(SpellRegistry.REGISTRY, MODID);
 
+
+    public static final Supplier<AbstractSpell> ZERO = registerSpell(new Zero());
+
     public static final Supplier<AbstractSpell> TIME_STOP;
     public static final Supplier<AbstractSpell> WISH;
     public static final Supplier<AbstractSpell> DIVINE_BOON;
@@ -23,6 +27,8 @@ public class CustomSpellRegistry {
     public static final Supplier<AbstractSpell> MOUNTAIN;
 
     static {
+
+
         MOUNTAIN = registerSpell(new CorpseMountainSpell());
         TIME_STOP = registerSpell(new TimeStopSpell());
         WISH = registerSpell(new WishSpell());

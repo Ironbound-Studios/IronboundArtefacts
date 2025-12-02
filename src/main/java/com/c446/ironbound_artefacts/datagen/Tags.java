@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -35,6 +36,7 @@ public class Tags {
 
         public static TagKey<AbstractSpell> WISH_UNCASTABLE = create(IronboundArtefact.prefix("wish_banned"));
 
+        public static TagKey<DamageType> IGNORE_SPELL_RES = TagKey.create(Registries.DAMAGE_TYPE, IronboundArtefact.prefix("no_spell_res"));
 
         public static TagKey<AbstractSpell> create(ResourceLocation name) {
             return new TagKey<AbstractSpell>(SpellRegistry.SPELL_REGISTRY_KEY, name);
