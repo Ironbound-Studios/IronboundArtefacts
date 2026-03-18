@@ -1,7 +1,6 @@
 package com.c446.ironbound_artefacts;
 
 import com.c446.ironbound_artefacts.registries.*;
-import com.c446.lines_and_particles_lib.network.ClientPayloadHandler;
 import io.redspace.ironsspellbooks.registries.CreativeTabRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -13,32 +12,33 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
+import static com.c446.ironbound_artefacts.IBA.MODID;
 
 public class ModSetup {
     public ModSetup(IEventBus modEventBus, ModContainer modContainer) {
         ModSetup.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.addListener(this::setup);
-        modEventBus.addListener(ClientPayloadHandler::registerClient);
 //        io.redspace.ironsspellbooks.setup.PayloadHandler
     }
 
     public static void register(IEventBus eventBus) {
-        ItemRegistry.ITEMS.register(eventBus);
-        AttributeRegistry.ATTRIBUTES.register(eventBus);
-        EffectsRegistry.EFFECTS.register(eventBus);
-        EffectsRegistry.POTIONS.register(eventBus);
-        CustomSpellRegistry.SPELLS.register(eventBus);
-        IBEntitiesReg.ENTITIES.register(eventBus);
-        AttachmentRegistry.ATTACHMENT_TYPE_DEFERRED_REGISTER.register(eventBus);
-        ComponentRegistry.register(eventBus);
+        RegistryItems.ITEMS.register(eventBus);
+        RegistryAttributes.ATTRIBUTES.register(eventBus);
+        RegistryEffects.EFFECTS.register(eventBus);
+        RegistryEffects.POTIONS.register(eventBus);
+        RegistrySpells.SPELLS.register(eventBus);
+        RegistryEntities.ENTITIES.register(eventBus);
+        RegistryAttachment.ATTACHMENT_TYPE_DEFERRED_REGISTER.register(eventBus);
+        RegistryComponent.register(eventBus);
         //ArmorMaterials.MATERIALS.register(eventBus);
         ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);
-        SchoolTypesRegistry.SCHOOLS.register(eventBus);
+        RegistrySchoolTypes.SCHOOLS.register(eventBus);
 
     }
 
@@ -51,6 +51,7 @@ public class ModSetup {
         // DO OTHER MODS CONFIG
     }
 
+
     protected static class ModCreativeTabReg {
         public static final DeferredRegister<CreativeModeTab> CREATIVE_MOD_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
@@ -58,7 +59,7 @@ public class ModSetup {
                         CreativeModeTab.builder()
                                 .withTabsAfter(CreativeTabRegistry.MATERIALS_TAB.getKey())
                                 .title(Component.translatable("tab.ironbounds_artefacts.curios"))
-                                .icon(() -> new ItemStack(ItemRegistry.THREE_WISHES))
+                                .icon(() -> new ItemStack(RegistryItems.THREE_WISHES))
                                 .displayItems((enabledFeatures, entries) -> {
 //                            //entries.accept(ItemRegistry.DEATH_AMULET.get());
 //                            //entries.accept(ItemRegistry.DEVILS_FINGER.get());
@@ -86,7 +87,7 @@ public class ModSetup {
 //                            entries.accept(ItemRegistry.WEAVE_CHEST_PLATE.get());
 //                            entries.accept(ItemRegistry.WEAVE_LEGGINGS.get());
 //                            entries.accept(ItemRegistry.WEAVE_BOOTS.get());
-                                    ItemRegistry.ITEMS.getEntries().forEach(i -> {
+                                    RegistryItems.ITEMS.getEntries().forEach(i -> {
                                         if (!i.is(Tags.Items.HIDDEN_FROM_RECIPE_VIEWERS)) {
                                             entries.accept(i.get());
                                         }
